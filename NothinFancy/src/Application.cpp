@@ -1,6 +1,5 @@
+#include "pch.h"
 #include "nf/Application.h"
-
-#include <iostream>
 
 namespace nf {
 	Application::Application() {
