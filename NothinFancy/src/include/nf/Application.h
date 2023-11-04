@@ -1,5 +1,15 @@
 #pragma once
+#include "nf/version.h"
 
 namespace nf {
-	void test();
+	class Application {
+	public:
+		Application();
+
+		void run();
+
+		~Application();
+	private:
+
+	};
 }

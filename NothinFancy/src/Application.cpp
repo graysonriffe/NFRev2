@@ -3,9 +3,17 @@
 #include <iostream>
 
 namespace nf {
-	void test() {
-		std::cout << "Hello from NF!\n";
+	Application::Application() {
+
+	}
+
+	void Application::run() {
+		std::cout << "Nothin' Fancy " NFVERSION "\n";
 
 		std::cin.get();
+	}
+
+	Application::~Application() {
+
 	}
 }

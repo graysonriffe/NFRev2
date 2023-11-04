@@ -2,7 +2,10 @@
 
 int main(int argc, char* argv[]) {
 
-	nf::test();
+	{
+		nf::Application app;
+		app.run();
+	}
 
 	return 0;
 }
