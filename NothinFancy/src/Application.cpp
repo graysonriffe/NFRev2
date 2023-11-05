@@ -15,7 +15,14 @@ namespace nf {
 		SetConsoleTitle(util::toWideStr(consoleTitle).c_str());
 #endif
 
-		std::cout << "Nothin' Fancy " NFVERSION "\n";
+		NFLog("Nothin' Fancy " NFVERSION);
+
+		std::string test = "String Test";
+		NFLog(test);
+
+		NFLog("Literal Test");
+
+		NFError("Something broke!");
 
 		std::cin.get();
 	}
