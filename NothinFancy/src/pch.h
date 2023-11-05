@@ -16,3 +16,6 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+
+//Windows
+#include <Windows.h>
