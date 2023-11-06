@@ -1,15 +1,15 @@
 #pragma once
-#include "nf/version.h"
+#include "nf/Config.h"
 
 namespace nf {
 	class Application {
 	public:
-		Application();
+		Application(Config config);
 
 		void run();
 
 		~Application();
 	private:
-
+		Config m_config;
 	};
 }

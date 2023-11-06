@@ -4,13 +4,13 @@
 
 #ifdef NFENGINE
 
-#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::EngLog);
-#define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::EngError, std::strrchr(__FILE__, '\\') + 1, __LINE__);
+#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::EngLog)
+#define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::EngError, std::strrchr(__FILE__, '\\') + 1, __LINE__)
 
 #else
 
-#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::UserLog);
-#define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::UserError, std::strrchr(__FILE__, '\\') + 1, __LINE__);
+#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::UserLog)
+#define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::UserError, std::strrchr(__FILE__, '\\') + 1, __LINE__)
 
 #endif
 

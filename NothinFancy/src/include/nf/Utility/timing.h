@@ -3,7 +3,7 @@
 
 #ifdef _DEBUG
 
-#define NFTime() ::nf::util::Timer __funcTimer(__FUNCSIG__);
+#define NFTime() ::nf::util::Timer __funcTimer(__FUNCSIG__)
 
 #else
 

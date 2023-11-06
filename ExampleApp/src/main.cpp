@@ -3,7 +3,9 @@
 int main(int argc, char* argv[]) {
 
 	{
-		nf::Application app;
+		nf::Config conf;
+		conf.appName = "Example App";
+		nf::Application app(conf);
 		app.run();
 	}
 

@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="src\include\nf.h" />
     <ClInclude Include="src\include\nf\Application.h" />
+    <ClInclude Include="src\include\nf\Config.h" />
     <ClInclude Include="src\include\nf\Utility\file.h" />
     <ClInclude Include="src\include\nf\Utility\log.h" />
     <ClInclude Include="src\include\nf\Utility\random.h" />

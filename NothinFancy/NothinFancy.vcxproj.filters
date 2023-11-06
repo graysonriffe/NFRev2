@@ -39,6 +39,9 @@
     <ClInclude Include="src\include\nf\Utility\file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\nf\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">

@@ -34,10 +34,12 @@ set version=%commit%
 
 ::Don't touch the version file if it's already up to date
 :testOutput
-set /p oldVersion= < src\include\nf\version.h
+set file=src\version.h
+
+set /p oldVersion= < %file%
 if "%oldVersion%" == "#define NFVERSION "%version%"" goto sameVersion
 
-echo #define NFVERSION "%version%"> src\include\nf\version.h
+echo #define NFVERSION "%version%"> %file%
 goto continue
 
 :sameVersion
