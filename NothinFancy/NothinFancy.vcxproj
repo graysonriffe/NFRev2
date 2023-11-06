@@ -98,9 +98,10 @@
   <ItemGroup>
     <ClInclude Include="src\include\nf.h" />
     <ClInclude Include="src\include\nf\Application.h" />
-    <ClInclude Include="src\include\nf\Log.h" />
+    <ClInclude Include="src\include\nf\Utility\log.h" />
+    <ClInclude Include="src\include\nf\Utility\timing.h" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\include\nf\Util.h" />
+    <ClInclude Include="src\include\nf\Utility\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -110,8 +111,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="src\Util\Log.cpp" />
-    <ClCompile Include="src\Util\Util.cpp" />
+    <ClCompile Include="src\Util\log.cpp" />
+    <ClCompile Include="src\Util\timing.cpp" />
+    <ClCompile Include="src\Util\util.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

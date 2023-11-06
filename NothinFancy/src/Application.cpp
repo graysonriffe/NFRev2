@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "nf/Application.h"
 
-#include "nf/Util.h"
+#include "nf/Utility/util.h"
 
 namespace nf {
 	Application::Application() {
@@ -15,14 +15,7 @@ namespace nf {
 		SetConsoleTitle(util::toWideStr(consoleTitle).c_str());
 #endif
 
-		NFLog("Nothin' Fancy " NFVERSION);
 
-		std::string test = "String Test";
-		NFLog(test);
-
-		NFLog("Literal Test");
-
-		NFError("Something broke!");
 
 		std::cin.get();
 	}

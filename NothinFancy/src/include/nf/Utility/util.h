@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 
-#include "nf/Log.h"
+#include "nf/Utility/log.h"
+#include "nf/Utility/timing.h"
 
 namespace nf::util {
 	std::string toStr(const std::wstring& in);

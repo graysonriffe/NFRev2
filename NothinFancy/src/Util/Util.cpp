@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "nf/Util.h"
+#include "nf/Utility/util.h"
 
 namespace nf::util {
 	std::string toStr(const std::wstring& in) {

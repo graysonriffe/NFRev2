@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "nf/Log.h"
+#include "nf/Utility/log.h"
 
-#include "nf/Util.h"
+#include "nf/Utility/util.h"
 
 namespace nf::util {
 	static std::mutex s_logMutex;
@@ -16,6 +16,8 @@ namespace nf::util {
 				return "Engine Error";
 			case UserError:
 				return "Error";
+			case Timing:
+				return "Timing";
 			default:
 				return "Unknown";
 		}
@@ -39,6 +41,9 @@ namespace nf::util {
 				break;
 			case UserError:
 				color = 4;
+				break;
+			case Timing:
+				color = 10;
 				break;
 		}
 

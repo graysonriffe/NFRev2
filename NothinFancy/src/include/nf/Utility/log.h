@@ -35,7 +35,8 @@ namespace nf::util {
 		EngLog,
 		UserLog,
 		EngError,
-		UserError
+		UserError,
+		Timing
 	};
 
 	void logImpl(const std::string& str, LogType type);

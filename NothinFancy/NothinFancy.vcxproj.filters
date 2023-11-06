@@ -24,10 +24,13 @@
     <ClInclude Include="src\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\nf\Util.h">
+    <ClInclude Include="src\include\nf\Utility\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\nf\Log.h">
+    <ClInclude Include="src\include\nf\Utility\log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\nf\Utility\timing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +41,13 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Util\Util.cpp">
+    <ClCompile Include="src\Util\util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Util\Log.cpp">
+    <ClCompile Include="src\Util\log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\timing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
