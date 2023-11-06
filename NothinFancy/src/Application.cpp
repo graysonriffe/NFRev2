@@ -15,7 +15,9 @@ namespace nf {
 		SetConsoleTitle(util::toWideStr(consoleTitle).c_str());
 #endif
 
-
+		for (int i = 0; i < 10; i++) {
+			NFLog(util::getRandRange(1, 10));
+		}
 
 		std::cin.get();
 	}

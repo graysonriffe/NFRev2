@@ -33,6 +33,9 @@
     <ClInclude Include="src\include\nf\Utility\timing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\include\nf\Utility\random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Util\timing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util\random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

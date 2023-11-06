@@ -6,6 +6,8 @@
 namespace nf::util {
 	static std::mutex s_logMutex;
 
+	using enum LogType;
+
 	static const char* getTypeStr(LogType type) {
 		switch (type) {
 			case EngLog:
@@ -53,13 +55,17 @@ namespace nf::util {
 		std::cout << "]: ";
 	}
 
-	void logImpl(const std::string& str, LogType type) {
+	void logImpl(const char* str, LogType type) {
 		std::scoped_lock logLock(s_logMutex);
 		printHeader(type);
 		std::cout << std::format("{}\n", str);
 	}
 
-	void errImplD(const char* str, LogType type, const char* file, unsigned int line) {
+	void logImpl(const std::string& str, LogType type) {
+		logImpl(str.c_str(), type);
+	}
+
+	void errImplD(const std::string& str, LogType type, const char* file, unsigned int line) {
 		std::scoped_lock logLock(s_logMutex);
 		printHeader(type);
 		std::cout << std::format("({}, {}) {}\n", file, line, str);
@@ -67,7 +73,7 @@ namespace nf::util {
 		__debugbreak();
 	}
 
-	void errImplRel(const char* str, LogType type, const char* file, unsigned int line) {
+	void errImplRel(const std::string& str, LogType type, const char* file, unsigned int line) {
 		std::string out = std::format("{}: {}\n\nAt: {}, Line {}", getTypeStr(type), str, file, line);
 		MessageBox(nullptr, toWideStr(out).c_str(), L"Nothin' Fancy Error", MB_OK | MB_ICONERROR);
 		std::exit(1);
