@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "nf/Utility/timing.h"
 
-#include "nf/Utility/log.h"
+#include "nf/Utility/util.h"
 
 namespace nf::util {
 	Timer::Timer(const char* funcSig) {

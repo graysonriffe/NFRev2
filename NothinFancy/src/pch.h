@@ -12,6 +12,7 @@
 #include <memory>
 #include <algorithm>
 #include <random>
+#include <sstream>
 #include <fstream>
 #include <thread>
 #include <atomic>

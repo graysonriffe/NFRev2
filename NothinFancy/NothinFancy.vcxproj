@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="src\include\nf.h" />
     <ClInclude Include="src\include\nf\Application.h" />
+    <ClInclude Include="src\include\nf\Utility\file.h" />
     <ClInclude Include="src\include\nf\Utility\log.h" />
     <ClInclude Include="src\include\nf\Utility\random.h" />
     <ClInclude Include="src\include\nf\Utility\timing.h" />
@@ -112,6 +113,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\Util\file.cpp" />
     <ClCompile Include="src\Util\log.cpp" />
     <ClCompile Include="src\Util\random.cpp" />
     <ClCompile Include="src\Util\timing.cpp" />
