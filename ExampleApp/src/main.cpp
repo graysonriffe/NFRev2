@@ -1,13 +1,10 @@
+#define NFENTRY
 #include "nf.h"
 
-int main(int argc, char* argv[]) {
+nf::Config nf::configApp(nf::CommandLineArguments cmd) {
+	nf::Config conf;
 
-	{
-		nf::Config conf;
-		conf.appName = "Example App";
-		nf::Application app(conf);
-		app.run();
-	}
+	conf.appName = "Example App";
 
-	return 0;
+	return conf;
 }
