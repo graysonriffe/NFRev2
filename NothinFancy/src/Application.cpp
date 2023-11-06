@@ -18,6 +18,9 @@ namespace nf {
 		NFLog(std::format("Nothin' Fancy {}", NFVERSION));
 		NFLog(std::format("Starting {} {}", m_config.appName, m_config.appVersion));
 
+		util::printMemoryUsage();
+
+		NFLog("Shutdown");
 		std::cin.get();
 	}
 

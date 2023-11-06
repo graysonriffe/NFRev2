@@ -11,4 +11,7 @@ namespace nf::util {
 
 	double getRand();
 	double getRandRange(double minimum, double maximum);
+
+	uint64_t getMemoryUsage();
+	void printMemoryUsage();
 }

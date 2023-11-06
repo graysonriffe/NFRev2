@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "nf/Utility/util.h"
 
+#include <Psapi.h>
+
 #undef max
 
 namespace nf::util {
@@ -24,5 +26,17 @@ namespace nf::util {
 
 	double getRandRange(double minimum, double maximum) {
 		return getRand() * (maximum - minimum) + minimum;
+	}
+
+	uint64_t getMemoryUsage() {
+		PROCESS_MEMORY_COUNTERS_EX mem = {};
+		GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&mem), sizeof(mem));
+
+		return mem.PrivateUsage;
+	}
+
+	void printMemoryUsage() {
+		uint64_t mem = getMemoryUsage();
+		NFLog(std::format("Memory Usage: {} bytes ({:.1f} MiB)", mem, mem / 1048576.0));
 	}
 }
