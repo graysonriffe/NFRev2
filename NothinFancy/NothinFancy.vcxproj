@@ -104,6 +104,7 @@
     <ClInclude Include="src\include\nf\Utility\timing.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\include\nf\Utility\util.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="src\Util\log.cpp" />
     <ClCompile Include="src\Util\timing.cpp" />
     <ClCompile Include="src\Util\util.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
