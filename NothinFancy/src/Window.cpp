@@ -25,10 +25,14 @@ namespace nf {
 
 	void Window::update() {
 		MSG msg = {};
-		while (GetMessage(&msg, NULL, NULL, NULL)) {
+		while (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+	}
+
+	Window::EventQueue& Window::getQueue() {
+		return m_events;
 	}
 
 	void Window::registerClass() const {
@@ -60,7 +64,7 @@ namespace nf {
 				return 0;
 
 			case WM_CLOSE:
-				DestroyWindow(hWnd);
+				window->m_events.emplace(new WindowCloseEvent);
 				return 0;
 
 			case WM_DESTROY:
@@ -73,6 +77,6 @@ namespace nf {
 
 
 	Window::~Window() {
-
+		DestroyWindow(m_window);
 	}
 }

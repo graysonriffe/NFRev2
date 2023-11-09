@@ -16,7 +16,7 @@
 
 #else
 
-#define NFLog
+#define NFLog(x)
 
 #ifdef NFENGINE
 

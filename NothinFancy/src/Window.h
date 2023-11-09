@@ -1,13 +1,18 @@
 #pragma once
 #include <Windows.h>
 
+#include "Event.h"
+
 namespace nf {
 	class Window {
 	public:
+		using EventQueue = std::queue<Event*>;
+
 		Window(const char* title);
 
 		void show(bool show = true);
 		void update();
+		EventQueue& getQueue();
 
 		~Window();
 	private:
@@ -22,5 +27,7 @@ namespace nf {
 
 		const DWORD m_windowedStyle;
 		const DWORD m_bFullscreenStyle;
+
+		EventQueue m_events;
 	};
 }

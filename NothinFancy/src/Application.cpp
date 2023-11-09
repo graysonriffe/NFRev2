@@ -8,6 +8,7 @@
 namespace nf {
 	Application::Application(Config config)
 		: m_config(config)
+		, m_running(false)
 	{}
 
 	void Application::run() {
@@ -19,13 +20,39 @@ namespace nf {
 		NFLog(std::format("Nothin' Fancy {}", NFVERSION));
 		NFLog(std::format("Starting {} {}", m_config.appName, m_config.appVersion));
 
+		m_running = true;
 
-		Window window(m_config.appName);
-		window.show();
+		{
+			Window window(m_config.appName);
+			window.show();
 
-		window.update();
+			while (m_running) {
+				window.update();
+				handleWindowEvents(window);
+			}
+		}
 
 		NFLog("Shutdown");
+	}
+
+	void Application::quit() {
+		m_running = false;
+	}
+
+	void Application::handleWindowEvents(Window& window) {
+		Window::EventQueue& queue = window.getQueue();
+
+		while (!queue.empty()) {
+			switch (queue.front()->getType()) {
+				case Event::Type::WindowClose:
+					NFLog("Event - WindowClose");
+					quit();
+					break;
+			}
+
+			queue.pop();
+		}
+
 	}
 
 	Application::~Application() {
