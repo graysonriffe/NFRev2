@@ -43,7 +43,20 @@ namespace nf {
 		Window::EventQueue& queue = window.getQueue();
 
 		while (!queue.empty()) {
-			switch (queue.front()->getType()) {
+			Event* curr = queue.front();
+			switch (curr->getType()) {
+				case Event::Type::KeyPress: {
+					input::Key key = dynamic_cast<KeyEvent*>(curr)->key;
+					NFLog(std::format("Event - KeyPress (Code = {})", static_cast<unsigned char>(key)));
+					break;
+				}
+
+				case Event::Type::KeyRelease: {
+					input::Key key = dynamic_cast<KeyEvent*>(curr)->key;
+					NFLog(std::format("Event - KeyRelease (Code = {})", static_cast<unsigned char>(key)));
+					break;
+				}
+
 				case Event::Type::WindowClose:
 					NFLog("Event - WindowClose");
 					quit();

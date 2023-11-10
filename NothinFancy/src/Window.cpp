@@ -63,6 +63,25 @@ namespace nf {
 				window = reinterpret_cast<Window*>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams);
 				return 0;
 
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+				if (static_cast<input::Key>(wParam) == input::Key::F4 && GetAsyncKeyState(static_cast<unsigned int>(input::Key::Alt)) & 0x8000) {
+					window->m_events.emplace(new WindowCloseEvent);
+					return 0;
+				}
+
+				if (!(lParam & (1 << 30))) //If not repeating
+					window->m_events.emplace(new KeyPressEvent(static_cast<input::Key>(wParam)));
+				return 0;
+
+			case WM_KEYUP:
+			case WM_SYSKEYUP:
+				window->m_events.emplace(new KeyReleaseEvent(static_cast<input::Key>(wParam)));
+				return 0;
+
+			case WM_MENUCHAR:
+				return MNC_CLOSE << 16;
+
 			case WM_CLOSE:
 				window->m_events.emplace(new WindowCloseEvent);
 				return 0;
