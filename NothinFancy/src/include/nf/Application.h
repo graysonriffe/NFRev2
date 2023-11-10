@@ -1,4 +1,6 @@
 #pragma once
+#include <future>
+
 #include "nf/Config.h"
 
 namespace nf {
@@ -13,6 +15,7 @@ namespace nf {
 
 		~Application();
 	private:
+		void runInputThread(std::promise<Window&> promiseWindow);
 		void handleWindowEvents(Window& window);
 
 		Config m_config;

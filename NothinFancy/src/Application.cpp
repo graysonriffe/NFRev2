@@ -23,13 +23,19 @@ namespace nf {
 		m_running = true;
 
 		{
-			Window window(m_config.appName);
-			window.show();
+			std::promise<Window&> promiseWindow;
+			std::future futureWindow = promiseWindow.get_future();
+			std::thread inputThread(&Application::runInputThread, this, std::move(promiseWindow));
+			Window& window = futureWindow.get();
+
+			//Renderer renderer(window);
 
 			while (m_running) {
-				window.update();
-				handleWindowEvents(window);
+				NFLog("Main Thread running!");
+				NFSleep(500);
 			}
+
+			inputThread.join();
 		}
 
 		NFLog("Shutdown");
@@ -37,6 +43,21 @@ namespace nf {
 
 	void Application::quit() {
 		m_running = false;
+	}
+
+	void Application::runInputThread(std::promise<Window&> promiseWindow) {
+#ifdef _DEBUG
+		SetThreadDescription(GetCurrentThread(), L"Input Thread");
+#endif
+
+		Window window(m_config.appName);
+		window.show();
+		promiseWindow.set_value(window);
+
+		while (m_running) {
+			window.update();
+			handleWindowEvents(window);
+		}
 	}
 
 	void Application::handleWindowEvents(Window& window) {
