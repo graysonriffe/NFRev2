@@ -4,7 +4,7 @@ namespace nf::input {
 	enum class Mouse : unsigned char {
 		Left = 0x01,
 		Right,
-		MiddleButton = 0x04
+		Middle = 0x04
 	};
 
 	enum class Key : unsigned char {

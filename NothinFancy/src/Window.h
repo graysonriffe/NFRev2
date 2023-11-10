@@ -18,8 +18,8 @@ namespace nf {
 	private:
 		void registerClass() const;
 		RECT getMonitor();
-
 		static LRESULT CALLBACK wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		void handleMouseButtons(bool pressed, input::Mouse button);
 
 		HWND m_window;
 		const HINSTANCE m_hInst;

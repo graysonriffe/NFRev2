@@ -63,6 +63,9 @@ namespace nf {
 				window = reinterpret_cast<Window*>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams);
 				return 0;
 
+			case WM_MENUCHAR:
+				return MNC_CLOSE << 16;
+
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
 				if (static_cast<input::Key>(wParam) == input::Key::F4 && GetAsyncKeyState(static_cast<unsigned int>(input::Key::Alt)) & 0x8000) {
@@ -79,8 +82,33 @@ namespace nf {
 				window->m_events.emplace(new KeyReleaseEvent(static_cast<input::Key>(wParam)));
 				return 0;
 
-			case WM_MENUCHAR:
-				return MNC_CLOSE << 16;
+			case WM_LBUTTONDOWN:
+				window->handleMouseButtons(true, input::Mouse::Left);
+				return 0;
+
+			case WM_RBUTTONDOWN:
+				window->handleMouseButtons(true, input::Mouse::Right);
+				return 0;
+
+			case WM_MBUTTONDOWN:
+				window->handleMouseButtons(true, input::Mouse::Middle);
+				return 0;
+
+			case WM_LBUTTONUP:
+				window->handleMouseButtons(false, input::Mouse::Left);
+				return 0;
+
+			case WM_RBUTTONUP:
+				window->handleMouseButtons(false, input::Mouse::Right);
+				return 0;
+
+			case WM_MBUTTONUP:
+				window->handleMouseButtons(false, input::Mouse::Middle);
+				return 0;
+
+			case WM_MOUSEWHEEL:
+				window->m_events.emplace(new MouseScrollEvent(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? MouseScrollEvent::Direction::Up : MouseScrollEvent::Direction::Down));
+				return 0;
 
 			case WM_CLOSE:
 				window->m_events.emplace(new WindowCloseEvent);
@@ -94,6 +122,9 @@ namespace nf {
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 
+	void Window::handleMouseButtons(bool pressed, input::Mouse button) {
+		pressed ? m_events.emplace(new MousePressEvent(button)) : m_events.emplace(new MouseReleaseEvent(button));
+	}
 
 	Window::~Window() {
 		DestroyWindow(m_window);

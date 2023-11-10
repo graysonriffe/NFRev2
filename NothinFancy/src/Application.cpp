@@ -57,6 +57,24 @@ namespace nf {
 					break;
 				}
 
+				case Event::Type::MousePress: {
+					input::Mouse button = dynamic_cast<MouseEvent*>(curr)->button;
+					NFLog(std::format("Event - MousePress (Button = {})", static_cast<unsigned char>(button)));
+					break;
+				}
+
+				case Event::Type::MouseRelease: {
+					input::Mouse button = dynamic_cast<MouseEvent*>(curr)->button;
+					NFLog(std::format("Event - MouseRelease (Button = {})", static_cast<unsigned char>(button)));
+					break;
+				}
+
+				case Event::Type::MouseScroll: {
+					MouseScrollEvent::Direction direction = dynamic_cast<MouseScrollEvent*>(curr)->direction;
+					NFLog(std::format("Event - MouseScroll (Direction = {})", static_cast<int>(direction)));
+					break;
+				}
+
 				case Event::Type::WindowClose:
 					NFLog("Event - WindowClose");
 					quit();

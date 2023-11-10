@@ -6,7 +6,7 @@ namespace nf {
 		enum class Type {
 			WindowClose,
 			KeyPress, KeyRelease,
-			MouseMove, MousePress, MouseRelease, MouseScroll
+			MousePress, MouseRelease, MouseScroll
 		};
 
 		virtual const Type getType() const = 0;
@@ -41,5 +41,44 @@ namespace nf {
 		{}
 
 		virtual const Type getType() const override { return Type::KeyRelease; }
+	};
+
+	struct MouseEvent : public Event {
+		input::Mouse button;
+
+	protected:
+		MouseEvent(input::Mouse button)
+			: button(button)
+		{}
+	};
+
+	struct MousePressEvent : public MouseEvent {
+		MousePressEvent(input::Mouse button)
+			: MouseEvent(button)
+		{}
+
+		virtual const Type getType() const override { return Type::MousePress; }
+	};
+
+	struct MouseReleaseEvent : public MouseEvent {
+		MouseReleaseEvent(input::Mouse button)
+			: MouseEvent(button)
+		{}
+
+		virtual const Type getType() const override { return Type::MouseRelease; }
+	};
+
+	struct MouseScrollEvent : Event {
+		enum class Direction {
+			Up, Down
+		};
+
+		Direction direction;
+
+		MouseScrollEvent(Direction direction)
+			: direction(direction)
+		{}
+
+		virtual const Type getType() const override { return Type::MouseScroll; }
 	};
 }
