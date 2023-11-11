@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "nf/Utility/util.h"
+#include "nf/Utility/Util.h"
 
 namespace nf::render {
 	Renderer::Renderer(Window& window, DisplayConfig& dispConfig)

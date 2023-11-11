@@ -2,7 +2,7 @@
 #include "nf/Application.h"
 
 #include "version.h"
-#include "nf/Utility/util.h"
+#include "nf/Utility/Util.h"
 #include "Window.h"
 #include "Render/Renderer.h"
 

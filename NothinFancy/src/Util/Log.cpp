@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "nf/Utility/log.h"
 
-#include "nf/Utility/util.h"
+#include "nf/Utility/Util.h"
 
 namespace nf::util {
 	static std::mutex s_logMutex;

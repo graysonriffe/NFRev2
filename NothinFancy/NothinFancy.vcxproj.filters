@@ -24,7 +24,7 @@
     <ClInclude Include="src\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\nf\Utility\util.h">
+    <ClInclude Include="src\include\nf\Utility\Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\include\nf\Utility\log.h">
@@ -59,7 +59,7 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Util\util.cpp">
+    <ClCompile Include="src\Util\Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Util\log.cpp">

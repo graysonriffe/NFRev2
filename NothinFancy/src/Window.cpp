@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Window.h"
 
-#include "nf/Utility/util.h"
+#include "nf/Utility/Util.h"
 
 namespace nf {
 	Window::Window(const char* title)
