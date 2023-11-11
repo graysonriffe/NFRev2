@@ -4,6 +4,7 @@
 #include "version.h"
 #include "nf/Utility/util.h"
 #include "Window.h"
+#include "Render/Renderer.h"
 
 namespace nf {
 	Application::Application(Config config)
@@ -28,10 +29,12 @@ namespace nf {
 			std::thread inputThread(&Application::runInputThread, this, std::move(promiseWindow));
 			Window& window = futureWindow.get();
 
-			//Renderer renderer(window);
+			render::Renderer renderer(window, m_config.display);
+			window.show();
 
 			while (m_running) {
 				NFLog("Main Thread running!");
+				renderer.doFrame();
 				NFSleep(500);
 			}
 
@@ -51,12 +54,12 @@ namespace nf {
 #endif
 
 		Window window(m_config.appName);
-		window.show();
 		promiseWindow.set_value(window);
 
 		while (m_running) {
 			window.update();
 			handleWindowEvents(window);
+			NFSleep(10);
 		}
 	}
 

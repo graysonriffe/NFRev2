@@ -7,6 +7,8 @@
 #ifdef NFENTRY
 
 namespace nf {
+	using enum DisplayConfig::Mode;
+
 	struct CommandLineArguments {
 		int argc;
 		char** argv;
