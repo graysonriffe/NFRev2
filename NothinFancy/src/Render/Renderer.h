@@ -4,8 +4,9 @@
 
 #include "Window.h"
 
-#include "Buffer.h"
 #include "ShaderSet.h"
+#include "Buffer.h"
+#include "InputLayout.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -32,6 +33,6 @@ namespace nf::render {
 		//Test stuff
 		UP<ShaderSet> m_testShaders;
 		UP<Buffer> m_testBuffer;
-		ComPtr<ID3D11InputLayout> m_testLayout;
+		UP<InputLayout> m_testLayout;
 	};
 }

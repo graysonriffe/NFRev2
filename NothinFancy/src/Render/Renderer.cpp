@@ -65,6 +65,8 @@ namespace nf::render {
 
 		setDisplay(dispConfig);
 
+		//Test stuff
+
 		std::string vertexShader, pixelShader;
 		util::readFile("BasicVertex.cso", vertexShader);
 		util::readFile("BasicPixel.cso", pixelShader);
@@ -81,14 +83,10 @@ namespace nf::render {
 		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 8);
 		m_testBuffer->bind(m_context);
 
-		D3D11_INPUT_ELEMENT_DESC elemDesc = {};
-		elemDesc.SemanticName = "POSITION";
-		elemDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
-		elemDesc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		elemDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-
-		m_device->CreateInputLayout(&elemDesc, 1, vertexShader.c_str(), vertexShader.size(), m_testLayout.GetAddressOf());
-		m_context->IASetInputLayout(m_testLayout.Get());
+		m_testLayout = std::make_unique<InputLayout>();
+		m_testLayout->pushFloat("POSITION", 2);
+		m_testLayout->create(m_device, vertexShader);
+		m_testLayout->bind(m_context);
 
 		m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
