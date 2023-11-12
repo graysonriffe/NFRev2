@@ -5,6 +5,7 @@
 #include "Window.h"
 
 #include "Buffer.h"
+#include "ShaderSet.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -29,8 +30,7 @@ namespace nf::render {
 		ComPtr<ID3D11RenderTargetView1> m_outRTV;
 
 		//Test stuff
-		ComPtr<ID3D11VertexShader> m_testVertexShader;
-		ComPtr<ID3D11PixelShader> m_testPixelShader;
+		UP<ShaderSet> m_testShaders;
 		UP<Buffer> m_testBuffer;
 		ComPtr<ID3D11InputLayout> m_testLayout;
 	};

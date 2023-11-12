@@ -69,10 +69,8 @@ namespace nf::render {
 		util::readFile("BasicVertex.cso", vertexShader);
 		util::readFile("BasicPixel.cso", pixelShader);
 
-		m_device->CreateVertexShader(vertexShader.c_str(), vertexShader.size(), nullptr, m_testVertexShader.GetAddressOf());
-		m_context->VSSetShader(m_testVertexShader.Get(), nullptr, 0);
-		m_device->CreatePixelShader(pixelShader.c_str(), pixelShader.size(), nullptr, m_testPixelShader.GetAddressOf());
-		m_context->PSSetShader(m_testPixelShader.Get(), nullptr, 0);
+		m_testShaders = std::make_unique<ShaderSet>(m_device, vertexShader, pixelShader);
+		m_testShaders->bind(m_context);
 
 		float triangle[] = {
 			-0.5f, -0.5f,

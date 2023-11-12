@@ -120,6 +120,7 @@
     <ClInclude Include="src\include\nf\Utility\Util.h" />
     <ClInclude Include="src\Render\Buffer.h" />
     <ClInclude Include="src\Render\Renderer.h" />
+    <ClInclude Include="src\Render\ShaderSet.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +133,7 @@
     </ClCompile>
     <ClCompile Include="src\Render\Buffer.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />
+    <ClCompile Include="src\Render\ShaderSet.cpp" />
     <ClCompile Include="src\Util\file.cpp" />
     <ClCompile Include="src\Util\log.cpp" />
     <ClCompile Include="src\Util\timing.cpp" />
