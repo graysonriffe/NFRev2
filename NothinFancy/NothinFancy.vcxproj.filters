@@ -78,4 +78,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="assets\base\shaders\BasicVertex.hlsl" />
+    <FxCompile Include="assets\base\shaders\BasicPixel.hlsl" />
+  </ItemGroup>
 </Project>
