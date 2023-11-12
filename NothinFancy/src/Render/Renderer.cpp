@@ -75,16 +75,17 @@ namespace nf::render {
 		m_testShaders->bind(m_context);
 
 		float triangle[] = {
-			-0.5f, -0.5f,
-			0.0f, 0.5f,
-			0.5f, -0.5f
+			-0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.5f, 0.0f, 1.0f, 0.0f,
+			0.5f, -0.5f, 0.0f, 0.0f, 1.0f
 		};
 
-		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 8);
+		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 5 * sizeof(float));
 		m_testBuffer->bind(m_context);
 
 		m_testLayout = std::make_unique<InputLayout>();
 		m_testLayout->pushFloat("POSITION", 2);
+		m_testLayout->pushFloat("COLOR", 3);
 		m_testLayout->create(m_device, vertexShader);
 		m_testLayout->bind(m_context);
 

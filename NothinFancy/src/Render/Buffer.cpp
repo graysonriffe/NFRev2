@@ -4,7 +4,7 @@
 namespace nf::render {
 	using enum Buffer::Type;
 
-	Buffer::Buffer(ComPtr<ID3D11Device> device, Type type, void* data, size_t size, unsigned int stride)
+	Buffer::Buffer(ComPtr<ID3D11Device> device, Type type, void* data, size_t size, size_t stride)
 		: m_type(type)
 		, m_stride(stride)
 	{
@@ -33,7 +33,7 @@ namespace nf::render {
 		switch (m_type) {
 			case Vertex: {
 				unsigned int offset = 0;
-				context->IASetVertexBuffers(0, 1, m_buffer.GetAddressOf(), &m_stride, &offset);
+				context->IASetVertexBuffers(0, 1, m_buffer.GetAddressOf(), reinterpret_cast<const unsigned int*>(&m_stride), &offset);
 				break;
 			}
 
