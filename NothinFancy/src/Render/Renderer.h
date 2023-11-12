@@ -4,7 +4,12 @@
 
 #include "Window.h"
 
+#include "Buffer.h"
+
 using Microsoft::WRL::ComPtr;
+
+template <typename T>
+using UP = std::unique_ptr<T>;
 
 namespace nf::render {
 	class Renderer {
@@ -24,9 +29,9 @@ namespace nf::render {
 		ComPtr<ID3D11RenderTargetView1> m_outRTV;
 
 		//Test stuff
-		ComPtr<ID3D11Buffer> m_testBuffer;
-		ComPtr<ID3D11InputLayout> m_testLayout;
 		ComPtr<ID3D11VertexShader> m_testVertexShader;
 		ComPtr<ID3D11PixelShader> m_testPixelShader;
+		UP<Buffer> m_testBuffer;
+		ComPtr<ID3D11InputLayout> m_testLayout;
 	};
 }

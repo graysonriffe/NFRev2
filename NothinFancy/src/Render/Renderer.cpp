@@ -65,24 +65,6 @@ namespace nf::render {
 
 		setDisplay(dispConfig);
 
-		float triangle[] = {
-			-0.5f, -0.5f,
-			0.0f, 0.5f,
-			0.5f, -0.5f
-		};
-
-		D3D11_BUFFER_DESC buffDesc = {};
-		buffDesc.ByteWidth = sizeof(triangle);
-		buffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-		D3D11_SUBRESOURCE_DATA sub = {};
-		sub.pSysMem = triangle;
-
-		m_device->CreateBuffer(&buffDesc, &sub, m_testBuffer.GetAddressOf());
-
-		unsigned int stride = 8, offset = 0;
-		m_context->IASetVertexBuffers(0, 1, m_testBuffer.GetAddressOf(), &stride, &offset);
-
 		std::string vertexShader, pixelShader;
 		util::readFile("BasicVertex.cso", vertexShader);
 		util::readFile("BasicPixel.cso", pixelShader);
@@ -91,6 +73,15 @@ namespace nf::render {
 		m_context->VSSetShader(m_testVertexShader.Get(), nullptr, 0);
 		m_device->CreatePixelShader(pixelShader.c_str(), pixelShader.size(), nullptr, m_testPixelShader.GetAddressOf());
 		m_context->PSSetShader(m_testPixelShader.Get(), nullptr, 0);
+
+		float triangle[] = {
+			-0.5f, -0.5f,
+			0.0f, 0.5f,
+			0.5f, -0.5f
+		};
+
+		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 8);
+		m_testBuffer->bind(m_context);
 
 		D3D11_INPUT_ELEMENT_DESC elemDesc = {};
 		elemDesc.SemanticName = "POSITION";
