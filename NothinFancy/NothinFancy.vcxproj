@@ -68,13 +68,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>NFPreBuild.bat</Command>
+      <Command>scripts/PreBuild.bat</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)*.cso" "$(SolutionDir)ExampleApp\working\"</Command>
+      <Command>scripts/PostBuild.bat "$(SolutionDir)ExampleApp\working\" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -98,13 +98,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>NFPreBuild.bat</Command>
+      <Command>scripts/PreBuild.bat</Command>
     </PreBuildEvent>
     <Lib>
       <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(OutDir)*.cso" "$(SolutionDir)ExampleApp\working\"</Command>
+      <Command>scripts/PostBuild.bat "$(SolutionDir)ExampleApp\working\" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
