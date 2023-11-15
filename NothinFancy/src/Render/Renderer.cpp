@@ -75,21 +75,37 @@ namespace nf::render {
 		m_testShaders->bind(m_context);
 
 		float triangle[] = {
-			-0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.5f, 0.0f, 1.0f, 0.0f,
-			0.5f, -0.5f, 0.0f, 0.0f, 1.0f
+			-0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f, 0.5f, 0.0f, 0.0f,
+			0.5f, -0.5f, 1.0f, 1.0f,
+			0.5f, 0.5f, 1.0f, 0.0f
 		};
 
-		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 5 * sizeof(float));
+		unsigned int indices[] = {
+			0, 1, 2, 1, 3, 2
+		};
+
+		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 4 * sizeof(float));
 		m_testBuffer->bind(m_context);
+		m_testIndexBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Index, indices, sizeof(indices));
+		m_testIndexBuffer->bind(m_context);
 
 		m_testLayout = std::make_unique<InputLayout>();
 		m_testLayout->pushFloat("POSITION", 2);
-		m_testLayout->pushFloat("COLOR", 3);
+		m_testLayout->pushFloat("TEXCOORD", 2);
 		m_testLayout->create(m_device, vertexShader);
 		m_testLayout->bind(m_context);
 
 		m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		m_testSampler = std::make_unique<SamplerState>(m_device);
+		m_testSampler->bind(m_context);
+
+		std::string textureData;
+		if (!util::readFile("logo.png", textureData))
+			NFError("Could not read logo.png!");
+
+		m_testTexture = std::make_unique<Texture>(m_device, textureData);
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {
@@ -138,7 +154,9 @@ namespace nf::render {
 		m_context->ClearRenderTargetView(m_outRTV.Get(), s_black);
 		m_context->OMSetRenderTargets(1, reinterpret_cast<ID3D11RenderTargetView**>(m_outRTV.GetAddressOf()), nullptr);
 
-		m_context->Draw(3, 0);
+		m_testTexture->bind(m_context);
+
+		m_context->DrawIndexed(6, 0, 0);
 
 		m_sc->Present(0, NULL);
 	}

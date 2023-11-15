@@ -1,9 +1,12 @@
 struct PS_IN {
     float4 pos : SV_POSITION;
-    float3 color : COLOR;
+    float2 tex : TEXCOORD;
 };
+
+Texture2D tex;
+SamplerState samp;
 
 float4 main(PS_IN input) : SV_TARGET
 {
-	return float4(input.color, 1.0f);
+    return tex.Sample(samp, input.tex);
 }

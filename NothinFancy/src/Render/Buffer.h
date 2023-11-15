@@ -12,7 +12,7 @@ namespace nf::render {
 			Index
 		};
 
-		Buffer(ComPtr<ID3D11Device> device, Type type, void* data, size_t size, size_t stride);
+		Buffer(ComPtr<ID3D11Device> device, Type type, void* data, size_t size, size_t stride = 0);
 
 		void bind(ComPtr<ID3D11DeviceContext> context);
 

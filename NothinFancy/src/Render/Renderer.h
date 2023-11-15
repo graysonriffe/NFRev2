@@ -7,6 +7,8 @@
 #include "ShaderSet.h"
 #include "Buffer.h"
 #include "InputLayout.h"
+#include "SamplerState.h"
+#include "Texture.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -33,6 +35,9 @@ namespace nf::render {
 		//Test stuff
 		UP<ShaderSet> m_testShaders;
 		UP<Buffer> m_testBuffer;
+		UP<Buffer> m_testIndexBuffer;
 		UP<InputLayout> m_testLayout;
+		UP<SamplerState> m_testSampler;
+		UP<Texture> m_testTexture;
 	};
 }
