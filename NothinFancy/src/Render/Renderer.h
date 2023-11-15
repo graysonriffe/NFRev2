@@ -9,6 +9,7 @@
 #include "InputLayout.h"
 #include "SamplerState.h"
 #include "Texture.h"
+#include "BlendState.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -39,5 +40,6 @@ namespace nf::render {
 		UP<InputLayout> m_testLayout;
 		UP<SamplerState> m_testSampler;
 		UP<Texture> m_testTexture;
+		UP<BlendState> m_testBlendState;
 	};
 }

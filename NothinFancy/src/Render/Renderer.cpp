@@ -106,6 +106,9 @@ namespace nf::render {
 			NFError("Could not read logo.png!");
 
 		m_testTexture = std::make_unique<Texture>(m_device, textureData);
+
+		m_testBlendState = std::make_unique<BlendState>(m_device);
+		m_testBlendState->bind(m_context);
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {

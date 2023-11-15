@@ -118,6 +118,7 @@
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\include\nf\Utility\Util.h" />
+    <ClInclude Include="src\Render\BlendState.h" />
     <ClInclude Include="src\Render\Buffer.h" />
     <ClInclude Include="src\Render\InputLayout.h" />
     <ClInclude Include="src\Render\Renderer.h" />
@@ -134,6 +135,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="src\Render\BlendState.cpp" />
     <ClCompile Include="src\Render\Buffer.cpp" />
     <ClCompile Include="src\Render\InputLayout.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />
