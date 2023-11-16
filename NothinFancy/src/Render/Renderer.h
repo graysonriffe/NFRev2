@@ -27,6 +27,7 @@ namespace nf::render {
 		~Renderer();
 	private:
 		Window& m_window;
+		const UINT m_scFlags;
 
 		ComPtr<ID3D11Device3> m_device;
 		ComPtr<ID3D11DeviceContext4> m_context;

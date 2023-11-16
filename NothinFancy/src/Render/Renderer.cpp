@@ -5,6 +5,8 @@
 
 using namespace DirectX;
 
+extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x01;
+
 namespace nf::render {
 	static const float s_black[] = {
 		0.0f, 0.0f, 0.0f, 1.0f
@@ -12,6 +14,7 @@ namespace nf::render {
 
 	Renderer::Renderer(Window& window, DisplayConfig& dispConfig)
 		: m_window(window)
+		, m_scFlags(DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING)
 	{
 		NFLog("Initializing renderer...");
 
@@ -53,7 +56,7 @@ namespace nf::render {
 		scDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		scDesc.SampleDesc.Count = 1;
 		scDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-		//scDesc.Flags =
+		scDesc.Flags = m_scFlags;
 
 		HWND hwnd = m_window.getHandle();
 		ComPtr<IDXGISwapChain1> tempSC;
@@ -171,7 +174,7 @@ namespace nf::render {
 		if (m_outRTV)
 			m_outRTV->Release();
 
-		m_sc->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, NULL);
+		m_sc->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, m_scFlags);
 		ComPtr<ID3D11Texture2D> backBuff;
 		m_sc->GetBuffer(0, __uuidof(backBuff), reinterpret_cast<void**>(backBuff.GetAddressOf()));
 		D3D11_RENDER_TARGET_VIEW_DESC1 rtvDesc = {};
