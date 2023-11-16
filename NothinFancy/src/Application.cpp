@@ -33,9 +33,8 @@ namespace nf {
 			window.show();
 
 			while (m_running) {
-				NFLog("Main Thread running!");
 				renderer.doFrame();
-				NFSleep(500);
+				//NFSleep(500);
 			}
 
 			inputThread.join();

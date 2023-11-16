@@ -9,12 +9,14 @@ namespace nf::render {
 	public:
 		enum class Type {
 			Vertex,
-			Index
+			Index,
+			Constant
 		};
 
 		Buffer(ComPtr<ID3D11Device> device, Type type, void* data, size_t size, size_t stride = 0);
 
 		void bind(ComPtr<ID3D11DeviceContext> context);
+		void update(ComPtr<ID3D11DeviceContext> context, void* data, size_t size);
 
 		~Buffer();
 	private:

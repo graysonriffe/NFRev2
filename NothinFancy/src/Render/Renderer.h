@@ -37,6 +37,7 @@ namespace nf::render {
 		UP<ShaderSet> m_testShaders;
 		UP<Buffer> m_testBuffer;
 		UP<Buffer> m_testIndexBuffer;
+		UP<Buffer> m_testConstantBuffer;
 		UP<InputLayout> m_testLayout;
 		UP<SamplerState> m_testSampler;
 		UP<Texture> m_testTexture;

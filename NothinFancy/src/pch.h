@@ -22,6 +22,7 @@
 //Windows
 #include <Windows.h>
 
-//Direct3D 11.3 and ComPtr
+//Direct3D 11.3
 #include <d3d11_3.h>
+#include <DirectXMath.h>
 #include <wrl/client.h>

@@ -3,6 +3,8 @@
 
 #include "nf/Utility/Util.h"
 
+using namespace DirectX;
+
 namespace nf::render {
 	static const float s_black[] = {
 		0.0f, 0.0f, 0.0f, 1.0f
@@ -74,36 +76,64 @@ namespace nf::render {
 		m_testShaders = std::make_unique<ShaderSet>(m_device, vertexShader, pixelShader);
 		m_testShaders->bind(m_context);
 
-		float triangle[] = {
-			-0.5f, -0.5f, 0.0f, 1.0f,
-			-0.5f, 0.5f, 0.0f, 0.0f,
-			0.5f, -0.5f, 1.0f, 1.0f,
-			0.5f, 0.5f, 1.0f, 0.0f
+		float cube[] = {
+			-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f,  0.5f, -0.5f, 0.0f, 0.0f,
+			0.5f,  0.5f, -0.5f, 1.0f, 0.0f,
+			0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
+			0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
+			0.5f,  0.5f, 0.5f, 0.0f, 0.0f,
+			-0.5f,  0.5f, 0.5f, 1.0f, 0.0f,
+			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+			-0.5f, 0.5f,  0.5f, 0.0f, 0.0f,
+			0.5f, 0.5f,  0.5f, 1.0f, 0.0f,
+			0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+			-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+			0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+			0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+			-0.5f, -0.5f,  0.5f, 0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+			-0.5f,  0.5f, -0.5f, 1.0f, 0.0f,
+			-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+			0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+			0.5f,  0.5f, -0.5f, 0.0f, 0.0f,
+			0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+			0.5f, -0.5f,  0.5f, 1.0f, 1.0f,
 		};
 
 		unsigned int indices[] = {
-			0, 1, 2, 1, 3, 2
+			0,  1,  2, 0,  2,  3,
+			4,  5,  6, 4,  6,  7,
+			8,  9, 10, 8, 10, 11,
+			12, 13, 14, 12, 14, 15,
+			16, 17, 18, 16, 18, 19,
+			20, 21, 22, 20, 22, 23
 		};
 
-		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, triangle, sizeof(triangle), 4 * sizeof(float));
+		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, cube, sizeof(cube), 5 * sizeof(float));
 		m_testBuffer->bind(m_context);
 		m_testIndexBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Index, indices, sizeof(indices));
 		m_testIndexBuffer->bind(m_context);
 
 		m_testLayout = std::make_unique<InputLayout>();
-		m_testLayout->pushFloat("POSITION", 2);
+		m_testLayout->pushFloat("POSITION", 3);
 		m_testLayout->pushFloat("TEXCOORD", 2);
 		m_testLayout->create(m_device, vertexShader);
 		m_testLayout->bind(m_context);
 
 		m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+		XMMATRIX dummy = XMMatrixIdentity();
+		m_testConstantBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Constant, &dummy, sizeof(dummy));
+
 		m_testSampler = std::make_unique<SamplerState>(m_device);
 		m_testSampler->bind(m_context);
 
 		std::string textureData;
-		if (!util::readFile("logo.png", textureData))
-			NFError("Could not read logo.png!");
+		if (!util::readFile("test.png", textureData))
+			NFError("Could not read test.png!");
 
 		m_testTexture = std::make_unique<Texture>(m_device, textureData);
 
@@ -154,14 +184,34 @@ namespace nf::render {
 	}
 
 	void Renderer::doFrame() {
+		DXGI_SWAP_CHAIN_DESC1 scDesc = {};
+		m_sc->GetDesc1(&scDesc);
+		unsigned int scWidth = scDesc.Width, scHeight = scDesc.Height;
+
 		m_context->ClearRenderTargetView(m_outRTV.Get(), s_black);
 		m_context->OMSetRenderTargets(1, reinterpret_cast<ID3D11RenderTargetView**>(m_outRTV.GetAddressOf()), nullptr);
 
 		m_testTexture->bind(m_context);
 
-		m_context->DrawIndexed(6, 0, 0);
+		XMMATRIX model = XMMatrixIdentity();
+		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
+		static float x = 0.0f;
+		x += 0.01f;
+		float offset = XM_PI * std::sin(x);
+		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.2f, 0.5f, 0.7f, 0.0f), offset));
+		model *= XMMatrixTranslation(0.0f, 0.0f, 1.5f);
 
-		m_sc->Present(0, NULL);
+		XMVECTOR camera = XMVectorZero(), lookDir = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);
+		XMMATRIX projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, static_cast<float>(scWidth) / scHeight, 0.1f, 1000.0f);
+		XMMATRIX mvp = model * view * projection;
+
+		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
+		m_testConstantBuffer->bind(m_context);
+
+		m_context->DrawIndexed(36, 0, 0);
+
+		m_sc->Present(1, NULL);
 	}
 
 	Renderer::~Renderer() {

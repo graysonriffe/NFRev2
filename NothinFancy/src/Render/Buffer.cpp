@@ -20,6 +20,12 @@ namespace nf::render {
 			case Index:
 				bind = D3D11_BIND_INDEX_BUFFER;
 				break;
+
+			case Constant:
+				bind = D3D11_BIND_CONSTANT_BUFFER;
+				desc.Usage = D3D11_USAGE_DYNAMIC;
+				desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+				break;
 		}
 		desc.BindFlags = bind;
 
@@ -40,7 +46,18 @@ namespace nf::render {
 			case Index:
 				context->IASetIndexBuffer(m_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 				break;
+
+			case Constant:
+				context->VSSetConstantBuffers(0, 1, m_buffer.GetAddressOf());
+				break;
 		}
+	}
+
+	void Buffer::update(ComPtr<ID3D11DeviceContext> context, void* data, size_t size) {
+		D3D11_MAPPED_SUBRESOURCE mapped = {};
+		context->Map(m_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &mapped);
+		std::memcpy(mapped.pData, data, size);
+		context->Unmap(m_buffer.Get(), 0);
 	}
 
 	Buffer::~Buffer() {

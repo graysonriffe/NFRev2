@@ -1,3 +1,7 @@
+cbuffer cBuff {
+    float4x4 mvp;
+};
+
 struct VS_IN {
     float4 pos : POSITION;
     float2 tex : TEXCOORD;
@@ -10,7 +14,7 @@ struct VS_OUT {
 
 VS_OUT main(VS_IN input) {
     VS_OUT output;
-    output.pos = input.pos;
+    output.pos = mul(mvp, input.pos);
     output.tex = input.tex;
 
     return output;
