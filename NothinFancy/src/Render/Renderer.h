@@ -42,5 +42,6 @@ namespace nf::render {
 		UP<SamplerState> m_testSampler;
 		UP<Texture> m_testTexture;
 		UP<BlendState> m_testBlendState;
+		ComPtr<ID3D11DepthStencilView> m_testDSV;
 	};
 }

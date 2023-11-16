@@ -127,6 +127,7 @@ namespace nf::render {
 
 		XMMATRIX dummy = XMMatrixIdentity();
 		m_testConstantBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Constant, &dummy, sizeof(dummy));
+		m_testConstantBuffer->bind(m_context);
 
 		m_testSampler = std::make_unique<SamplerState>(m_device);
 		m_testSampler->bind(m_context);
@@ -135,10 +136,13 @@ namespace nf::render {
 		if (!util::readFile("test.png", textureData))
 			NFError("Could not read test.png!");
 
-		m_testTexture = std::make_unique<Texture>(m_device, textureData);
+		m_testTexture = std::make_unique<Texture>(m_device, textureData.data(), textureData.size());
 
 		m_testBlendState = std::make_unique<BlendState>(m_device);
 		m_testBlendState->bind(m_context);
+
+		Texture depthTex(m_device, dispConfig.width, dispConfig.height, true);
+		m_device->CreateDepthStencilView(depthTex.getTexture().Get(), nullptr, m_testDSV.GetAddressOf());
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {
@@ -189,7 +193,8 @@ namespace nf::render {
 		unsigned int scWidth = scDesc.Width, scHeight = scDesc.Height;
 
 		m_context->ClearRenderTargetView(m_outRTV.Get(), s_black);
-		m_context->OMSetRenderTargets(1, reinterpret_cast<ID3D11RenderTargetView**>(m_outRTV.GetAddressOf()), nullptr);
+		m_context->ClearDepthStencilView(m_testDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+		m_context->OMSetRenderTargets(1, reinterpret_cast<ID3D11RenderTargetView**>(m_outRTV.GetAddressOf()), m_testDSV.Get());
 
 		m_testTexture->bind(m_context);
 
@@ -207,8 +212,15 @@ namespace nf::render {
 		XMMATRIX mvp = model * view * projection;
 
 		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
-		m_testConstantBuffer->bind(m_context);
 
+		m_context->DrawIndexed(36, 0, 0);
+
+		model = XMMatrixIdentity();
+		model *= XMMatrixScaling(3.0f, 1.0f, 1.0f);
+		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(1.0f, 0.0f, 1.0f, 0.0f), XM_PIDIV2));
+		model *= XMMatrixTranslation(0.0f, 0.0f, 3.0f);
+		mvp = model * view * projection;
+		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
 		m_context->DrawIndexed(36, 0, 0);
 
 		m_sc->Present(1, NULL);

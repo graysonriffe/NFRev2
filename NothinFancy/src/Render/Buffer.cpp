@@ -4,7 +4,7 @@
 namespace nf::render {
 	using enum Buffer::Type;
 
-	Buffer::Buffer(ComPtr<ID3D11Device> device, Type type, void* data, size_t size, size_t stride)
+	Buffer::Buffer(ComPtr<ID3D11Device> device, Type type, const void* data, size_t size, size_t stride)
 		: m_type(type)
 		, m_stride(stride)
 	{
@@ -53,7 +53,7 @@ namespace nf::render {
 		}
 	}
 
-	void Buffer::update(ComPtr<ID3D11DeviceContext> context, void* data, size_t size) {
+	void Buffer::update(ComPtr<ID3D11DeviceContext> context, const void* data, size_t size) {
 		D3D11_MAPPED_SUBRESOURCE mapped = {};
 		context->Map(m_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &mapped);
 		std::memcpy(mapped.pData, data, size);

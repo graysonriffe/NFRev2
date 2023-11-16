@@ -7,7 +7,7 @@
 #include "nf/Utility/Util.h"
 
 namespace nf::render {
-	Texture::Texture(ComPtr<ID3D11Device> device, const std::string& data) {
+	Texture::Texture(ComPtr<ID3D11Device> device, const void* data, size_t size) {
 		D3D11_TEXTURE2D_DESC desc = {};
 		DXGI_FORMAT texFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 		desc.Format = texFormat;
@@ -15,11 +15,10 @@ namespace nf::render {
 		desc.ArraySize = 1;
 		desc.SampleDesc.Count = 1;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		desc.Usage = D3D11_USAGE_IMMUTABLE;
 
 		D3D11_SUBRESOURCE_DATA sub = {};
 		int width = 0, height = 0, channels = 0, requiredChannels = 4;
-		unsigned char* stbData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data.data()), static_cast<int>(data.size()), &width, &height, &channels, requiredChannels);
+		unsigned char* stbData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data), static_cast<int>(size), &width, &height, &channels, requiredChannels);
 		if (!stbData)
 			NFError("Could not load texture data!");
 
@@ -40,8 +39,31 @@ namespace nf::render {
 		device->CreateShaderResourceView(m_texture.Get(), &viewDesc, m_view.GetAddressOf());
 	}
 
+	Texture::Texture(ComPtr<ID3D11Device> device, unsigned int width, unsigned int height, bool depth) {
+		D3D11_TEXTURE2D_DESC desc = {};
+		desc.MipLevels = 1;
+		desc.ArraySize = 1;
+		desc.SampleDesc.Count = 1;
+		desc.Width = width;
+		desc.Height = height;
+
+		if (depth) {
+			desc.Format = DXGI_FORMAT_D32_FLOAT;
+			desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		}
+		else {
+			desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+		}
+
+		device->CreateTexture2D(&desc, nullptr, m_texture.GetAddressOf());
+	}
+
 	void Texture::bind(ComPtr<ID3D11DeviceContext> context) {
 		context->PSSetShaderResources(0, 1, m_view.GetAddressOf());
+	}
+
+	ComPtr<ID3D11Texture2D> Texture::getTexture() const {
+		return m_texture;
 	}
 
 	Texture::~Texture() {
