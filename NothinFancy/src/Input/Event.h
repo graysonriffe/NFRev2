@@ -1,7 +1,7 @@
 #pragma once
-#include "Input.h"
+#include "InputCodes.h"
 
-namespace nf {
+namespace nf::input {
 	struct Event {
 		enum class Type {
 			WindowClose,

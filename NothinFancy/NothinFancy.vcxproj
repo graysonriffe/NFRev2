@@ -108,14 +108,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Event.h" />
+    <ClInclude Include="src\Input\Event.h" />
     <ClInclude Include="src\include\nf.h" />
     <ClInclude Include="src\include\nf\Application.h" />
     <ClInclude Include="src\include\nf\Config.h" />
     <ClInclude Include="src\include\nf\Utility\file.h" />
     <ClInclude Include="src\include\nf\Utility\log.h" />
     <ClInclude Include="src\include\nf\Utility\timing.h" />
-    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Input\InputCodes.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\include\nf\Utility\Util.h" />
     <ClInclude Include="src\Render\BlendState.h" />

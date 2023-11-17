@@ -1,13 +1,13 @@
 #pragma once
 #include <Windows.h>
 
-#include "Event.h"
+#include "Input/Event.h"
 #include "nf/Config.h"
 
 namespace nf {
 	class Window {
 	public:
-		using EventQueue = std::queue<Event*>;
+		using EventQueue = std::queue<input::Event*>;
 
 		Window(const char* title);
 

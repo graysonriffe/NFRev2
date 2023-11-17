@@ -62,42 +62,44 @@ namespace nf {
 	}
 
 	void Application::handleWindowEvents(Window& window) {
+		using enum input::Event::Type;
+
 		Window::EventQueue& queue = window.getQueue();
 
 		while (!queue.empty()) {
-			Event* curr = queue.front();
+			input::Event* curr = queue.front();
 			switch (curr->getType()) {
-				case Event::Type::KeyPress: {
-					input::Key key = dynamic_cast<KeyEvent*>(curr)->key;
+				case KeyPress: {
+					input::Key key = dynamic_cast<input::KeyEvent*>(curr)->key;
 					NFLog(std::format("Event - KeyPress (Code = {})", static_cast<unsigned char>(key)));
 					break;
 				}
 
-				case Event::Type::KeyRelease: {
-					input::Key key = dynamic_cast<KeyEvent*>(curr)->key;
+				case KeyRelease: {
+					input::Key key = dynamic_cast<input::KeyEvent*>(curr)->key;
 					NFLog(std::format("Event - KeyRelease (Code = {})", static_cast<unsigned char>(key)));
 					break;
 				}
 
-				case Event::Type::MousePress: {
-					input::Mouse button = dynamic_cast<MouseEvent*>(curr)->button;
+				case MousePress: {
+					input::Mouse button = dynamic_cast<input::MouseEvent*>(curr)->button;
 					NFLog(std::format("Event - MousePress (Button = {})", static_cast<unsigned char>(button)));
 					break;
 				}
 
-				case Event::Type::MouseRelease: {
-					input::Mouse button = dynamic_cast<MouseEvent*>(curr)->button;
+				case MouseRelease: {
+					input::Mouse button = dynamic_cast<input::MouseEvent*>(curr)->button;
 					NFLog(std::format("Event - MouseRelease (Button = {})", static_cast<unsigned char>(button)));
 					break;
 				}
 
-				case Event::Type::MouseScroll: {
-					MouseScrollEvent::Direction direction = dynamic_cast<MouseScrollEvent*>(curr)->direction;
+				case MouseScroll: {
+					input::MouseScrollEvent::Direction direction = dynamic_cast<input::MouseScrollEvent*>(curr)->direction;
 					NFLog(std::format("Event - MouseScroll (Direction = {})", static_cast<int>(direction)));
 					break;
 				}
 
-				case Event::Type::WindowClose:
+				case WindowClose:
 					NFLog("Event - WindowClose");
 					quit();
 					break;

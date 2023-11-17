@@ -106,17 +106,17 @@ namespace nf {
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
 				if (static_cast<input::Key>(wParam) == input::Key::F4 && GetAsyncKeyState(static_cast<unsigned int>(input::Key::Alt)) & 0x8000) {
-					window->m_events.emplace(new WindowCloseEvent);
+					window->m_events.emplace(new input::WindowCloseEvent);
 					return 0;
 				}
 
 				if (!(lParam & (1 << 30))) //If not repeating
-					window->m_events.emplace(new KeyPressEvent(static_cast<input::Key>(wParam)));
+					window->m_events.emplace(new input::KeyPressEvent(static_cast<input::Key>(wParam)));
 				return 0;
 
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
-				window->m_events.emplace(new KeyReleaseEvent(static_cast<input::Key>(wParam)));
+				window->m_events.emplace(new input::KeyReleaseEvent(static_cast<input::Key>(wParam)));
 				return 0;
 
 			case WM_LBUTTONDOWN:
@@ -144,11 +144,11 @@ namespace nf {
 				return 0;
 
 			case WM_MOUSEWHEEL:
-				window->m_events.emplace(new MouseScrollEvent(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? MouseScrollEvent::Direction::Up : MouseScrollEvent::Direction::Down));
+				window->m_events.emplace(new input::MouseScrollEvent(GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? input::MouseScrollEvent::Direction::Up : input::MouseScrollEvent::Direction::Down));
 				return 0;
 
 			case WM_CLOSE:
-				window->m_events.emplace(new WindowCloseEvent);
+				window->m_events.emplace(new input::WindowCloseEvent);
 				return 0;
 
 			case WM_DESTROY:
@@ -160,7 +160,7 @@ namespace nf {
 	}
 
 	void Window::handleMouseButtons(bool pressed, input::Mouse button) {
-		pressed ? m_events.emplace(new MousePressEvent(button)) : m_events.emplace(new MouseReleaseEvent(button));
+		pressed ? m_events.emplace(new input::MousePressEvent(button)) : m_events.emplace(new input::MouseReleaseEvent(button));
 	}
 
 	Window::~Window() {
