@@ -8,6 +8,84 @@ using namespace DirectX;
 extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x01;
 
 namespace nf::render {
+	static void parseOBJ(const std::string& obj, std::vector<float>& verticesOut, std::vector<unsigned int>& indicesOut) {
+		verticesOut.clear();
+		indicesOut.clear();
+
+		std::stringstream ss(obj);
+
+		struct VPos {
+			float x, y, z;
+		};
+		std::vector<VPos> rawV;
+
+		struct TCoord {
+			float u, v;
+		};
+		std::vector<TCoord> rawTC;
+
+		struct VInd {
+			unsigned int v, t;
+		};
+		std::vector<VInd> rawInd;
+
+		std::string line;
+		while (std::getline(ss, line)) {
+			std::stringstream ssLine(line);
+			std::string op;
+			ssLine >> op;
+
+			if (op == "v") {
+				float x = 0.0f, y = 0.0f, z = 0.0f;
+				ssLine >> x >> y >> z;
+				rawV.push_back({ x, y, z });
+			}
+			else if (op == "vt") {
+				float u = 0.0f, v = 0.0f;
+				ssLine >> u >> v;
+				rawTC.push_back({ u, v });
+			}
+			else if (op == "f") {
+				unsigned int v1 = 0, t1 = 0, v2 = 0, t2 = 0, v3 = 0, t3 = 0;
+				char temp = 0;
+				ssLine >> v1 >> temp >> t1 >> v2 >> temp >> t2 >> v3 >> temp >> t3;
+				rawInd.push_back({ v1, t1 });
+				rawInd.push_back({ v2, t2 });
+				rawInd.push_back({ v3, t3 });
+			}
+		}
+
+		struct Vertex {
+			VPos pos;
+			TCoord tc;
+
+			bool operator<(const Vertex other) const {
+				return std::memcmp(this, &other, sizeof(Vertex)) > 0;
+			}
+		};
+
+		std::map<Vertex, unsigned int> vMap;
+		unsigned int currIndex = 0;
+		for (const auto& currInd : rawInd) {
+			Vertex currVertex = { rawV[currInd.v - 1], rawTC[currInd.t - 1] };
+
+			bool found = vMap.find(currVertex) != vMap.end();
+			if (found) {
+				indicesOut.push_back(vMap[currVertex]);
+				continue;
+			}
+
+			verticesOut.push_back(currVertex.pos.x);
+			verticesOut.push_back(currVertex.pos.y);
+			verticesOut.push_back(currVertex.pos.z);
+			verticesOut.push_back(currVertex.tc.u);
+			verticesOut.push_back(currVertex.tc.v);
+			indicesOut.push_back(currIndex);
+			vMap[currVertex] = currIndex;
+			currIndex++;
+		}
+	}
+
 	static const float s_black[] = {
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
@@ -79,45 +157,18 @@ namespace nf::render {
 		m_testShaders = std::make_unique<ShaderSet>(m_device, vertexShader, pixelShader);
 		m_testShaders->bind(m_context);
 
-		float cube[] = {
-			-0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f, 0.0f, 0.0f,
-			0.5f,  0.5f, -0.5f, 1.0f, 0.0f,
-			0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-			-0.5f, -0.5f, 0.5f, 1.0f, 1.0f,
-			0.5f, -0.5f, 0.5f, 0.0f, 1.0f,
-			0.5f,  0.5f, 0.5f, 0.0f, 0.0f,
-			-0.5f,  0.5f, 0.5f, 1.0f, 0.0f,
-			-0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
-			-0.5f, 0.5f,  0.5f, 0.0f, 0.0f,
-			0.5f, 0.5f,  0.5f, 1.0f, 0.0f,
-			0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-			0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-			0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-			-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-			-0.5f, -0.5f,  0.5f, 0.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f, 1.0f, 0.0f,
-			-0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-			0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-			0.5f,  0.5f, -0.5f, 0.0f, 0.0f,
-			0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-			0.5f, -0.5f,  0.5f, 1.0f, 1.0f,
-		};
+		std::string objData;
+		if (!util::readFile("test.obj", objData))
+			NFError("Could not read test.obj!");
 
-		unsigned int indices[] = {
-			0,  1,  2, 0,  2,  3,
-			4,  5,  6, 4,  6,  7,
-			8,  9, 10, 8, 10, 11,
-			12, 13, 14, 12, 14, 15,
-			16, 17, 18, 16, 18, 19,
-			20, 21, 22, 20, 22, 23
-		};
+		std::vector<float> objVertices;
+		std::vector<unsigned int> objIndices;
 
-		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, cube, sizeof(cube), 5 * sizeof(float));
+		parseOBJ(objData, objVertices, objIndices);
+
+		m_testBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Vertex, objVertices.data(), sizeof(float) * objVertices.size(), 5 * sizeof(float));
 		m_testBuffer->bind(m_context);
-		m_testIndexBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Index, indices, sizeof(indices));
+		m_testIndexBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Index, objIndices.data(), sizeof(unsigned int) * objIndices.size());
 		m_testIndexBuffer->bind(m_context);
 
 		m_testLayout = std::make_unique<InputLayout>();
@@ -206,8 +257,8 @@ namespace nf::render {
 		static float x = 0.0f;
 		x += 0.01f;
 		float offset = XM_PI * std::sin(x);
-		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.2f, 0.5f, 0.7f, 0.0f), offset));
-		model *= XMMatrixTranslation(0.0f, 0.0f, 1.5f);
+		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.4f, 0.5f, 0.8f, 0.0f), offset));
+		model *= XMMatrixTranslation(0.0f, 0.0f, 2.0f);
 
 		XMVECTOR camera = XMVectorZero(), lookDir = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);
@@ -216,15 +267,7 @@ namespace nf::render {
 
 		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
 
-		m_context->DrawIndexed(36, 0, 0);
-
-		model = XMMatrixIdentity();
-		model *= XMMatrixScaling(3.0f, 1.0f, 1.0f);
-		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(1.0f, 0.0f, 1.0f, 0.0f), XM_PIDIV2));
-		model *= XMMatrixTranslation(0.0f, 0.0f, 3.0f);
-		mvp = model * view * projection;
-		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
-		m_context->DrawIndexed(36, 0, 0);
+		m_context->DrawIndexed(3642, 0, 0);
 
 		//Copy testFramebuffer to outRTV
 		outputRTV(m_testFramebuffer->getRTV());
