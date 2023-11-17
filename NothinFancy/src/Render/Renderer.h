@@ -12,6 +12,7 @@
 #include "BlendState.h"
 #include "Framebuffer.h"
 #include "Model.h"
+#include "Camera.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -47,5 +48,6 @@ namespace nf::render {
 		UP<BlendState> m_testBlendState;
 		UP<Framebuffer> m_testFramebuffer;
 		UP<Model> m_testModel;
+		UP<Camera> m_testCamera;
 	};
 }

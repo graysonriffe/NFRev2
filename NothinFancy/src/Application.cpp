@@ -34,9 +34,6 @@ namespace nf {
 
 			while (m_running) {
 				renderer.doFrame();
-				NFSleep(1000);
-				NFLog(std::format("Left Mouse Button Held: {}", input::InputState::isKeyHeld(input::Code::MouseLeft)));
-				NFLog(std::format("Left Mouse Button Pressed: {}", input::InputState::isKeyPress(input::Code::MouseLeft)));
 			}
 
 			inputThread.join();

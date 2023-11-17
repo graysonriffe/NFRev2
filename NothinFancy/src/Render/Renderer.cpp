@@ -111,6 +111,8 @@ namespace nf::render {
 		m_testBlendState->bind(m_context);
 
 		m_testFramebuffer = std::make_unique<Framebuffer>(m_device);
+
+		m_testCamera = std::make_unique<Camera>(Vec3());
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {
@@ -175,7 +177,10 @@ namespace nf::render {
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.4f, 0.5f, 0.8f, 0.0f), offset));
 		model *= XMMatrixTranslation(0.0f, 0.0f, 1.5f);
 
-		XMVECTOR camera = XMVectorZero(), lookDir = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		m_testCamera->update();
+		Vec3 cameraPos = m_testCamera->getPosition();
+
+		XMVECTOR camera = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f), lookDir = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);
 		XMMATRIX projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, static_cast<float>(scWidth) / scHeight, 0.1f, 1000.0f);
 		XMMATRIX mvp = model * view * projection;
