@@ -22,7 +22,7 @@ namespace nf {
 	private:
 		void registerClass() const;
 		static LRESULT CALLBACK wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-		void handleMouseButtons(bool pressed, input::Mouse button);
+		void handleMouseButtons(input::Code button, bool pressed);
 
 		HWND m_handle;
 		const HINSTANCE m_hInst;

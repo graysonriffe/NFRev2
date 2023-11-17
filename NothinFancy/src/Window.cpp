@@ -105,42 +105,42 @@ namespace nf {
 
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
-				if (static_cast<input::Key>(wParam) == input::Key::F4 && GetAsyncKeyState(static_cast<unsigned int>(input::Key::Alt)) & 0x8000) {
+				if (static_cast<input::Code>(wParam) == input::Code::F4 && GetAsyncKeyState(static_cast<unsigned int>(input::Code::Alt)) & 0x8000) {
 					window->m_events.emplace(new input::WindowCloseEvent);
 					return 0;
 				}
 
 				if (!(lParam & (1 << 30))) //If not repeating
-					window->m_events.emplace(new input::KeyPressEvent(static_cast<input::Key>(wParam)));
+					window->m_events.emplace(new input::KeyPressEvent(static_cast<input::Code>(wParam)));
 				return 0;
 
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
-				window->m_events.emplace(new input::KeyReleaseEvent(static_cast<input::Key>(wParam)));
+				window->m_events.emplace(new input::KeyReleaseEvent(static_cast<input::Code>(wParam)));
 				return 0;
 
 			case WM_LBUTTONDOWN:
-				window->handleMouseButtons(true, input::Mouse::Left);
+				window->handleMouseButtons(input::Code::MouseLeft, true);
 				return 0;
 
 			case WM_RBUTTONDOWN:
-				window->handleMouseButtons(true, input::Mouse::Right);
+				window->handleMouseButtons(input::Code::MouseRight, true);
 				return 0;
 
 			case WM_MBUTTONDOWN:
-				window->handleMouseButtons(true, input::Mouse::Middle);
+				window->handleMouseButtons(input::Code::MouseMiddle, true);
 				return 0;
 
 			case WM_LBUTTONUP:
-				window->handleMouseButtons(false, input::Mouse::Left);
+				window->handleMouseButtons(input::Code::MouseLeft, false);
 				return 0;
 
 			case WM_RBUTTONUP:
-				window->handleMouseButtons(false, input::Mouse::Right);
+				window->handleMouseButtons(input::Code::MouseRight, false);
 				return 0;
 
 			case WM_MBUTTONUP:
-				window->handleMouseButtons(false, input::Mouse::Middle);
+				window->handleMouseButtons(input::Code::MouseMiddle, false);
 				return 0;
 
 			case WM_MOUSEWHEEL:
@@ -159,8 +159,8 @@ namespace nf {
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 
-	void Window::handleMouseButtons(bool pressed, input::Mouse button) {
-		pressed ? m_events.emplace(new input::MousePressEvent(button)) : m_events.emplace(new input::MouseReleaseEvent(button));
+	void Window::handleMouseButtons(input::Code button, bool pressed) {
+		pressed ? m_events.emplace(new input::KeyPressEvent(button)) : m_events.emplace(new input::KeyReleaseEvent(button));
 	}
 
 	Window::~Window() {

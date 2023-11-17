@@ -5,6 +5,7 @@
 #include "nf/Utility/Util.h"
 #include "Window.h"
 #include "Render/Renderer.h"
+#include "Input/InputState.h"
 
 namespace nf {
 	Application::Application(Config config)
@@ -33,7 +34,9 @@ namespace nf {
 
 			while (m_running) {
 				renderer.doFrame();
-				//NFSleep(500);
+				NFSleep(1000);
+				NFLog(std::format("Left Mouse Button Held: {}", input::InputState::isKeyHeld(input::Code::MouseLeft)));
+				NFLog(std::format("Left Mouse Button Pressed: {}", input::InputState::isKeyPress(input::Code::MouseLeft)));
 			}
 
 			inputThread.join();
@@ -63,6 +66,7 @@ namespace nf {
 
 	void Application::handleWindowEvents(Window& window) {
 		using enum input::Event::Type;
+		input::InputState& inputState = input::InputState::get();
 
 		Window::EventQueue& queue = window.getQueue();
 
@@ -70,26 +74,16 @@ namespace nf {
 			input::Event* curr = queue.front();
 			switch (curr->getType()) {
 				case KeyPress: {
-					input::Key key = dynamic_cast<input::KeyEvent*>(curr)->key;
+					input::Code key = dynamic_cast<input::KeyEvent*>(curr)->key;
 					NFLog(std::format("Event - KeyPress (Code = {})", static_cast<unsigned char>(key)));
+					inputState.updateState(key, true);
 					break;
 				}
 
 				case KeyRelease: {
-					input::Key key = dynamic_cast<input::KeyEvent*>(curr)->key;
+					input::Code key = dynamic_cast<input::KeyEvent*>(curr)->key;
 					NFLog(std::format("Event - KeyRelease (Code = {})", static_cast<unsigned char>(key)));
-					break;
-				}
-
-				case MousePress: {
-					input::Mouse button = dynamic_cast<input::MouseEvent*>(curr)->button;
-					NFLog(std::format("Event - MousePress (Button = {})", static_cast<unsigned char>(button)));
-					break;
-				}
-
-				case MouseRelease: {
-					input::Mouse button = dynamic_cast<input::MouseEvent*>(curr)->button;
-					NFLog(std::format("Event - MouseRelease (Button = {})", static_cast<unsigned char>(button)));
+					inputState.updateState(key, false);
 					break;
 				}
 

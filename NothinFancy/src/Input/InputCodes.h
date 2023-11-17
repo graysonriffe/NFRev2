@@ -1,13 +1,10 @@
 #pragma once
 
 namespace nf::input {
-	enum class Mouse : unsigned char {
-		Left = 0x01,
-		Right,
-		Middle = 0x04
-	};
-
-	enum class Key : unsigned char {
+	enum class Code : unsigned char {
+		MouseLeft = 0x01,
+		MouseRight,
+		MouseMiddle = 0x04,
 		Backspace = 0x08,
 		Tab,
 		Enter = 0x0D,
