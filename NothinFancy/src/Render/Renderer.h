@@ -10,6 +10,7 @@
 #include "SamplerState.h"
 #include "Texture.h"
 #include "BlendState.h"
+#include "Framebuffer.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -26,6 +27,8 @@ namespace nf::render {
 
 		~Renderer();
 	private:
+		void outputRTV(ComPtr<ID3D11RenderTargetView> rtv);
+
 		Window& m_window;
 		const UINT m_scFlags;
 
@@ -43,6 +46,6 @@ namespace nf::render {
 		UP<SamplerState> m_testSampler;
 		UP<Texture> m_testTexture;
 		UP<BlendState> m_testBlendState;
-		ComPtr<ID3D11DepthStencilView> m_testDSV;
+		UP<Framebuffer> m_testFramebuffer;
 	};
 }

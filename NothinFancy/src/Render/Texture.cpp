@@ -52,6 +52,7 @@ namespace nf::render {
 			desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		}
 		else {
+			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 			desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 		}
 

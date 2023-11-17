@@ -144,8 +144,7 @@ namespace nf::render {
 		m_testBlendState = std::make_unique<BlendState>(m_device);
 		m_testBlendState->bind(m_context);
 
-		Texture depthTex(m_device, dispConfig.width, dispConfig.height, true);
-		m_device->CreateDepthStencilView(depthTex.getTexture().Get(), nullptr, m_testDSV.GetAddressOf());
+		m_testFramebuffer = std::make_unique<Framebuffer>(m_device, 2);
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {
@@ -188,6 +187,8 @@ namespace nf::render {
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		m_context->RSSetViewports(1, &vp);
+
+		m_window.show();
 	}
 
 	void Renderer::doFrame() {
@@ -195,9 +196,8 @@ namespace nf::render {
 		m_sc->GetDesc1(&scDesc);
 		unsigned int scWidth = scDesc.Width, scHeight = scDesc.Height;
 
-		m_context->ClearRenderTargetView(m_outRTV.Get(), s_black);
-		m_context->ClearDepthStencilView(m_testDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
-		m_context->OMSetRenderTargets(1, reinterpret_cast<ID3D11RenderTargetView**>(m_outRTV.GetAddressOf()), m_testDSV.Get());
+		m_testFramebuffer->bind(m_context, m_device, scWidth, scHeight);
+		m_testFramebuffer->clear(m_context, s_black);
 
 		m_testTexture->bind(m_context);
 
@@ -226,7 +226,18 @@ namespace nf::render {
 		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
 		m_context->DrawIndexed(36, 0, 0);
 
+		//Copy testFramebuffer to outRTV
+		outputRTV(m_testFramebuffer->getRTV());
+
 		m_sc->Present(1, NULL);
+	}
+
+	void Renderer::outputRTV(ComPtr<ID3D11RenderTargetView> rtv) {
+		ComPtr<ID3D11Resource> in, out;
+		rtv->GetResource(in.GetAddressOf());
+		m_outRTV->GetResource(out.GetAddressOf());
+
+		m_context->CopyResource(out.Get(), in.Get());
 	}
 
 	Renderer::~Renderer() {

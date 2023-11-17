@@ -30,7 +30,6 @@ namespace nf {
 			Window& window = futureWindow.get();
 
 			render::Renderer renderer(window, m_config.display);
-			window.show();
 
 			while (m_running) {
 				renderer.doFrame();
