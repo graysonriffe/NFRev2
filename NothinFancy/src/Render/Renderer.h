@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "BlendState.h"
 #include "Framebuffer.h"
+#include "Model.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -39,13 +40,12 @@ namespace nf::render {
 
 		//Test stuff
 		UP<ShaderSet> m_testShaders;
-		UP<Buffer> m_testBuffer;
-		UP<Buffer> m_testIndexBuffer;
 		UP<Buffer> m_testConstantBuffer;
 		UP<InputLayout> m_testLayout;
 		UP<SamplerState> m_testSampler;
 		UP<Texture> m_testTexture;
 		UP<BlendState> m_testBlendState;
 		UP<Framebuffer> m_testFramebuffer;
+		UP<Model> m_testModel;
 	};
 }

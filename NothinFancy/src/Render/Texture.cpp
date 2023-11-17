@@ -7,7 +7,7 @@
 #include "nf/Utility/Util.h"
 
 namespace nf::render {
-	Texture::Texture(ComPtr<ID3D11Device> device, const void* data, size_t size) {
+	Texture::Texture(ComPtr<ID3D11Device> device, const std::string& data) {
 		D3D11_TEXTURE2D_DESC desc = {};
 		DXGI_FORMAT texFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 		desc.Format = texFormat;
@@ -18,7 +18,7 @@ namespace nf::render {
 
 		D3D11_SUBRESOURCE_DATA sub = {};
 		int width = 0, height = 0, channels = 0, requiredChannels = 4;
-		unsigned char* stbData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data), static_cast<int>(size), &width, &height, &channels, requiredChannels);
+		unsigned char* stbData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data.data()), static_cast<int>(data.size()), &width, &height, &channels, requiredChannels);
 		if (!stbData)
 			NFError("Could not load texture data!");
 
