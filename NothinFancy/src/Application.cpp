@@ -46,24 +46,26 @@ namespace nf {
 		m_running = false;
 	}
 
+	using namespace input;
+
 	void Application::runInputThread(std::promise<Window&> promiseWindow) {
 #ifdef _DEBUG
 		SetThreadDescription(GetCurrentThread(), L"Input Thread");
 #endif
-
 		Window window(m_config.appName);
+		InputState::initialize(&window);
 		promiseWindow.set_value(window);
 
 		while (m_running) {
 			window.update();
 			handleWindowEvents(window);
+			InputState::updateMouse();
 			NFSleep(10);
 		}
 	}
 
 	void Application::handleWindowEvents(Window& window) {
 		using enum input::Event::Type;
-		input::InputState& inputState = input::InputState::get();
 
 		Window::EventQueue& queue = window.getQueue();
 
@@ -73,14 +75,14 @@ namespace nf {
 				case KeyPress: {
 					input::Code key = dynamic_cast<input::KeyEvent*>(curr)->key;
 					NFLog(std::format("Event - KeyPress (Code = {})", static_cast<unsigned char>(key)));
-					inputState.updateState(key, true);
+					InputState::updateState(key, true);
 					break;
 				}
 
 				case KeyRelease: {
 					input::Code key = dynamic_cast<input::KeyEvent*>(curr)->key;
 					NFLog(std::format("Event - KeyRelease (Code = {})", static_cast<unsigned char>(key)));
-					inputState.updateState(key, false);
+					InputState::updateState(key, false);
 					break;
 				}
 

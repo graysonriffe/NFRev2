@@ -17,6 +17,7 @@ namespace nf {
 		EventQueue& getQueue();
 		HWND getHandle() const;
 		void setType(DisplayConfig::Mode mode);
+		void hideCursor(bool hide);
 
 		~Window();
 	private:
@@ -30,6 +31,8 @@ namespace nf {
 
 		const DWORD m_windowedStyle;
 		const DWORD m_bFullscreenStyle;
+
+		bool m_hideCursor;
 
 		EventQueue m_events;
 	};

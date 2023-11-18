@@ -179,8 +179,9 @@ namespace nf::render {
 
 		m_testCamera->update();
 		Vec3 cameraPos = m_testCamera->getPosition();
+		Vec3 cameraDir = m_testCamera->getRotation();
 
-		XMVECTOR camera = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f), lookDir = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		XMVECTOR camera = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f), lookDir = XMVectorSet(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);
 		XMMATRIX projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, static_cast<float>(scWidth) / scHeight, 0.1f, 1000.0f);
 		XMMATRIX mvp = model * view * projection;

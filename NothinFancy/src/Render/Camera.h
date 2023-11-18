@@ -8,9 +8,12 @@ namespace nf::render {
 
 		void update();
 		Vec3 getPosition() const;
+		Vec3 getRotation() const;
 
 		~Camera();
 	private:
 		Vec3 m_position;
+
+		float m_yaw, m_pitch;
 	};
 }

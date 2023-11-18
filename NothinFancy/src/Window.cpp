@@ -10,6 +10,7 @@ namespace nf {
 		, m_wndClassName(L"NothinFancyWindow")
 		, m_windowedStyle(WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX)
 		, m_bFullscreenStyle(WS_SYSMENU)
+		, m_hideCursor(false)
 	{
 		registerClass();
 
@@ -82,6 +83,10 @@ namespace nf {
 		SetWindowPos(m_handle, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_FRAMECHANGED | SWP_NOZORDER);
 	}
 
+	void Window::hideCursor(bool hide) {
+		m_hideCursor = hide;
+	}
+
 	void Window::registerClass() const {
 		WNDCLASS wc = {};
 		wc.lpszClassName = m_wndClassName;
@@ -102,6 +107,14 @@ namespace nf {
 
 			case WM_MENUCHAR:
 				return MNC_CLOSE << 16;
+
+			case WM_SETCURSOR:
+				if (window->m_hideCursor && LOWORD(lParam) == HTCLIENT) {
+					SetCursor(NULL);
+					return 0;
+				}
+
+				break;
 
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
