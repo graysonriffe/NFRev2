@@ -2,6 +2,7 @@
 #include "Renderer.h"
 
 #include "nf/Utility/Util.h"
+#include "Input/InputState.h"
 
 using namespace DirectX;
 
@@ -118,6 +119,10 @@ namespace nf::render {
 	void Renderer::setDisplay(DisplayConfig& conf) {
 		using enum DisplayConfig::Mode;
 
+		bool wasMouseCaptured = input::InputState::isMouseCapture();
+		if (wasMouseCaptured)
+			input::InputState::captureMouse(false);
+
 		m_window.setType(conf.mode);
 		DXGI_MODE_DESC scDesc = {};
 
@@ -157,6 +162,9 @@ namespace nf::render {
 		m_context->RSSetViewports(1, &vp);
 
 		m_window.show();
+
+		if (wasMouseCaptured)
+			input::InputState::captureMouse(true);
 	}
 
 	void Renderer::doFrame() {

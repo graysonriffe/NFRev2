@@ -24,6 +24,7 @@ namespace nf::input {
 		static void updateMouse();
 
 		static void captureMouse(bool capture);
+		static bool isMouseCapture();
 		static void getMouseDiff(int& x, int& y);
 	private:
 		InputState();
@@ -36,6 +37,7 @@ namespace nf::input {
 		void i_updateMouse();
 
 		void i_captureMouse(bool capture);
+		bool i_isMouseCapture() const;
 		void i_getMouseDiff(int& x, int& y);
 
 		~InputState();

@@ -36,6 +36,10 @@ namespace nf::input {
 		get().i_captureMouse(capture);
 	}
 
+	bool InputState::isMouseCapture() {
+		return get().i_isMouseCapture();
+	}
+
 	void InputState::getMouseDiff(int& x, int& y) {
 		get().i_getMouseDiff(x, y);
 	}
@@ -95,6 +99,10 @@ namespace nf::input {
 		if (m_mouseCaptured)
 			m_mouseCaptureReset = true;
 		m_window->hideCursor(m_mouseCaptured);
+	}
+
+	bool InputState::i_isMouseCapture() const {
+		return m_mouseCaptured;
 	}
 
 	void InputState::i_getMouseDiff(int& x, int& y) {
