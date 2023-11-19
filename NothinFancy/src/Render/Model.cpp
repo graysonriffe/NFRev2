@@ -54,20 +54,21 @@ namespace nf::render {
 			if (op == "v") {
 				float x = 0.0f, y = 0.0f, z = 0.0f;
 				ssLine >> x >> y >> z;
-				rawV.push_back({ x, y, z });
+				//Invert normals too later
+				rawV.push_back({ x, y, -1.0f * z });
 			}
 			else if (op == "vt") {
 				float u = 0.0f, v = 0.0f;
 				ssLine >> u >> v;
-				rawTC.push_back({ u, v });
+				rawTC.push_back({ u, 1.0f - v });
 			}
 			else if (op == "f") {
 				unsigned int v1 = 0, t1 = 0, v2 = 0, t2 = 0, v3 = 0, t3 = 0;
 				char temp = 0;
 				ssLine >> v1 >> temp >> t1 >> v2 >> temp >> t2 >> v3 >> temp >> t3;
 				rawInd.push_back({ v1, t1 });
-				rawInd.push_back({ v2, t2 });
 				rawInd.push_back({ v3, t3 });
+				rawInd.push_back({ v2, t2 });
 			}
 		}
 

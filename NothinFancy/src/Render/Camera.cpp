@@ -27,10 +27,10 @@ namespace nf::render {
 		if (input::InputState::isKeyHeld(input::Code::S))
 			m_position -= getRotation() * 0.1f;
 		if (input::InputState::isKeyHeld(input::Code::D)) {
-			m_position -= getRotation().cross(Vec3(0.0f, 1.0f, 0.0f)) * 0.1f;
+			m_position -= getRotation().cross(Vec3(0.0f, 1.0f, 0.0f)).normalize() * 0.1f;
 		}
 		if (input::InputState::isKeyHeld(input::Code::A)) {
-			m_position += getRotation().cross(Vec3(0.0f, 1.0f, 0.0f)) * 0.1f;
+			m_position += getRotation().cross(Vec3(0.0f, 1.0f, 0.0f)).normalize() * 0.1f;
 		}
 
 		if (input::InputState::isKeyPress(input::Code::E))

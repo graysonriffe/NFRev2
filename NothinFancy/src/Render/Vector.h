@@ -52,8 +52,22 @@ namespace nf::render {
 			return *this;
 		}
 
-		Vec3 cross(const Vec3& rhs) {
-			return Vec3(y * rhs.z - z * rhs.y, z * rhs.x - x * rhs.z, x * rhs.y - y * rhs.x);
+		Vec3& cross(const Vec3& rhs) {
+			float tempX = x, tempY = y, tempZ = z;
+			x = tempY * rhs.z - tempZ * rhs.y;
+			y = tempZ * rhs.x - tempX * rhs.z;
+			z = tempX * rhs.y - tempY * rhs.x;
+			return *this;
+		}
+
+		float length() {
+			return std::sqrtf(x * x + y * y + z * z);
+		}
+
+		Vec3& normalize() {
+			float lInv = 1.0f / length();
+			x *= lInv, y *= lInv, z *= lInv;
+			return *this;
 		}
 	};
 }
