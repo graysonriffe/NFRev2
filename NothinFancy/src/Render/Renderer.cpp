@@ -77,8 +77,10 @@ namespace nf::render {
 		//Test stuff
 
 		std::string vertexShader, pixelShader;
-		util::readFile("BasicVertex.cso", vertexShader);
-		util::readFile("BasicPixel.cso", pixelShader);
+		if (!util::readFile("BasicVertex.cso", vertexShader))
+			NFError("Could not read BasicVertex.cso!");
+		if (!util::readFile("BasicPixel.cso", pixelShader))
+			NFError("Could not read BasicVertex.cso!");
 
 		m_testShaders = std::make_unique<ShaderSet>(m_device, vertexShader, pixelShader);
 		m_testShaders->bind(m_context);
@@ -108,6 +110,7 @@ namespace nf::render {
 		m_testFramebuffer = std::make_unique<Framebuffer>(m_device);
 
 		m_testCamera = std::make_unique<Camera>(Vec3(0.0f, 0.0f, -3.0f));
+		m_testCamera->setType(Camera::Type::FPS);
 
 		std::string objData;
 		if (!util::readFile("floor.obj", objData))

@@ -4,7 +4,14 @@
 namespace nf::render {
 	class Camera {
 	public:
+		enum class Type {
+			UI,
+			FPS
+		};
+
 		Camera(Vec3 position);
+
+		void setType(Type type);
 
 		void update();
 		Vec3 getPosition() const;
@@ -12,8 +19,9 @@ namespace nf::render {
 
 		~Camera();
 	private:
-		Vec3 m_position;
+		Type m_type;
 
+		Vec3 m_position;
 		float m_yaw, m_pitch;
 	};
 }
