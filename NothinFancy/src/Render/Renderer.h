@@ -44,10 +44,12 @@ namespace nf::render {
 		UP<Buffer> m_testConstantBuffer;
 		UP<InputLayout> m_testLayout;
 		UP<SamplerState> m_testSampler;
-		UP<Texture> m_testTexture;
 		UP<BlendState> m_testBlendState;
 		UP<Framebuffer> m_testFramebuffer;
-		UP<Model> m_testModel;
 		UP<Camera> m_testCamera;
+		UP<Model> m_testFloor;
+		UP<Texture> m_testFloorTexture;
+		UP<Model> m_testCube;
+		UP<Texture> m_testCubeTexture;
 	};
 }

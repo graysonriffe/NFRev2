@@ -80,13 +80,6 @@ namespace nf::render {
 		m_testShaders = std::make_unique<ShaderSet>(m_device, vertexShader, pixelShader);
 		m_testShaders->bind(m_context);
 
-		std::string objData;
-		if (!util::readFile("test.obj", objData))
-			NFError("Could not read test.obj!");
-
-		m_testModel = std::make_unique<Model>(m_device, objData);
-		m_testModel->bind(m_context);
-
 		m_testLayout = std::make_unique<InputLayout>();
 		m_testLayout->pushFloat("POSITION", 3);
 		m_testLayout->pushFloat("TEXCOORD", 2);
@@ -102,18 +95,34 @@ namespace nf::render {
 		m_testSampler = std::make_unique<SamplerState>(m_device);
 		m_testSampler->bind(m_context);
 
-		std::string textureData;
-		if (!util::readFile("test.png", textureData))
-			NFError("Could not read test.png!");
-
-		m_testTexture = std::make_unique<Texture>(m_device, textureData);
-
 		m_testBlendState = std::make_unique<BlendState>(m_device);
 		m_testBlendState->bind(m_context);
 
 		m_testFramebuffer = std::make_unique<Framebuffer>(m_device);
 
-		m_testCamera = std::make_unique<Camera>(Vec3());
+		m_testCamera = std::make_unique<Camera>(Vec3(0.0f, 0.0f, -3.0f));
+
+		std::string objData;
+		if (!util::readFile("floor.obj", objData))
+			NFError("Could not read floor.obj!");
+
+		m_testFloor = std::make_unique<Model>(m_device, objData);
+
+		std::string textureData;
+		if (!util::readFile("floor.jpg", textureData))
+			NFError("Could not read floor.jpg!");
+
+		m_testFloorTexture = std::make_unique<Texture>(m_device, textureData);
+
+		if (!util::readFile("cube.obj", objData))
+			NFError("Could not read cube.obj!");
+
+		m_testCube = std::make_unique<Model>(m_device, objData);
+
+		if (!util::readFile("cube.png", textureData))
+			NFError("Could not read cube.png!");
+
+		m_testCubeTexture = std::make_unique<Texture>(m_device, textureData);
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {
@@ -175,28 +184,32 @@ namespace nf::render {
 		m_testFramebuffer->bind(m_context, m_device, scWidth, scHeight);
 		m_testFramebuffer->clear(m_context, s_black);
 
-		m_testTexture->bind(m_context);
-
-		XMMATRIX model = XMMatrixIdentity();
-		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
-		static float x = 0.0f;
-		x += 0.01f;
-		float offset = XM_PI * std::sin(x);
-		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.4f, 0.5f, 0.8f, 0.0f), offset));
-		model *= XMMatrixTranslation(0.0f, 0.0f, 1.5f);
-
 		m_testCamera->update();
-		Vec3 cameraPos = m_testCamera->getPosition();
-		Vec3 cameraDir = m_testCamera->getRotation();
+		Vec3 cameraPos = m_testCamera->getPosition(), cameraDir = m_testCamera->getRotation();
 
 		XMVECTOR camera = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f), lookDir = XMVectorSet(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);
 		XMMATRIX projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, static_cast<float>(scWidth) / scHeight, 0.1f, 1000.0f);
+
+		m_testFloor->bind(m_context);
+		m_testFloorTexture->bind(m_context);
+		XMMATRIX model = XMMatrixIdentity();
+		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
+		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
+		model *= XMMatrixTranslation(0.0f, -3.0f, 0.0f);
 		XMMATRIX mvp = model * view * projection;
-
 		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
+		m_context->DrawIndexed(m_testFloor->getIndexCount(), 0, 0);
 
-		m_context->DrawIndexed(m_testModel->getIndexCount(), 0, 0);
+		m_testCube->bind(m_context);
+		m_testCubeTexture->bind(m_context);
+		model = XMMatrixIdentity();
+		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
+		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
+		model *= XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+		mvp = model * view * projection;
+		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
+		m_context->DrawIndexed(m_testCube->getIndexCount(), 0, 0);
 
 		outputRTV(m_testFramebuffer->getRTV());
 
