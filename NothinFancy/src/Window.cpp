@@ -109,7 +109,7 @@ namespace nf {
 				return MNC_CLOSE << 16;
 
 			case WM_SETCURSOR:
-				if (window->m_hideCursor && LOWORD(lParam) == HTCLIENT) {
+				if (window->m_hideCursor && GetForegroundWindow() == window->m_handle && LOWORD(lParam) == HTCLIENT) {
 					SetCursor(NULL);
 					return 0;
 				}
