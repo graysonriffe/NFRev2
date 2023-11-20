@@ -3,9 +3,14 @@
 
 #include "Input/InputState.h"
 
+using namespace DirectX;
+
 namespace nf::render {
+	using namespace input;
+	using enum Camera::Type;
+
 	Camera::Camera(Vec3 position)
-		: m_type(Type::UI)
+		: m_type(UI)
 		, m_position(position)
 		, m_yaw(90.0f), m_pitch(0.0f)
 	{}
@@ -13,12 +18,10 @@ namespace nf::render {
 	void Camera::setType(Type type) {
 		m_type = type;
 
-		input::InputState::captureMouse(m_type == Type::FPS);
+		InputState::captureMouse(m_type == FPS);
 	}
 
 	void Camera::update() {
-		using enum Type;
-
 		switch (m_type) {
 			case UI:
 
@@ -26,7 +29,7 @@ namespace nf::render {
 
 			case FPS: {
 				int mouseDiffX = 0, mouseDiffY = 0;
-				input::InputState::getMouseDiff(mouseDiffX, mouseDiffY);
+				InputState::getMouseDiff(mouseDiffX, mouseDiffY);
 				m_yaw -= static_cast<float>(mouseDiffX) * 0.1f;
 				m_pitch -= static_cast<float>(mouseDiffY) * 0.1f;
 
@@ -40,22 +43,22 @@ namespace nf::render {
 		}
 
 		float speed = 0.1f;
-		if (input::InputState::isKeyHeld(input::Code::Shift))
+		if (InputState::isKeyHeld(Code::Shift))
 			speed *= 3;
 
-		if (input::InputState::isKeyHeld(input::Code::W))
+		if (InputState::isKeyHeld(Code::W))
 			m_position += getRotation() * speed;
-		if (input::InputState::isKeyHeld(input::Code::S))
+		if (InputState::isKeyHeld(Code::S))
 			m_position -= getRotation() * speed;
-		if (input::InputState::isKeyHeld(input::Code::D)) {
+		if (InputState::isKeyHeld(Code::D)) {
 			m_position -= getRotation().cross(Vec3(0.0f, 1.0f, 0.0f)).normalize() * speed;
 		}
-		if (input::InputState::isKeyHeld(input::Code::A)) {
+		if (InputState::isKeyHeld(Code::A)) {
 			m_position += getRotation().cross(Vec3(0.0f, 1.0f, 0.0f)).normalize() * speed;
 		}
 
-		if (input::InputState::isKeyPress(input::Code::E))
-			m_type == Type::FPS ? setType(Type::UI) : setType(Type::FPS);
+		if (InputState::isKeyPress(Code::E))
+			m_type == FPS ? setType(UI) : setType(FPS);
 	}
 
 	Vec3 Camera::getPosition() const {
@@ -64,9 +67,9 @@ namespace nf::render {
 
 	Vec3 Camera::getRotation() const {
 		Vec3 rot;
-		rot.x = std::cos(DirectX::XMConvertToRadians(m_yaw)) * std::cos(DirectX::XMConvertToRadians(m_pitch));
-		rot.y = std::sin(DirectX::XMConvertToRadians(m_pitch));
-		rot.z = std::sin(DirectX::XMConvertToRadians(m_yaw)) * std::cos(DirectX::XMConvertToRadians(m_pitch));
+		rot.x = std::cos(XMConvertToRadians(m_yaw)) * std::cos(XMConvertToRadians(m_pitch));
+		rot.y = std::sin(XMConvertToRadians(m_pitch));
+		rot.z = std::sin(XMConvertToRadians(m_yaw)) * std::cos(XMConvertToRadians(m_pitch));
 		return rot;
 	}
 
