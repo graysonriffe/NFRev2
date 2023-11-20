@@ -13,7 +13,7 @@ float4 main(PS_IN input) : SV_TARGET
 {
     float3 lightPos = float3(5.0f, 5.0f, -5.0f);
 
-    float3 diffColor = tex.Sample(samp, input.tex);
+    float3 diffColor = tex.Sample(samp, input.tex).rgb;
     float3 norm = normalize(input.norm);
     float3 lightDir = normalize(lightPos - input.pixCoord);
     float diff = max(dot(norm, lightDir), 0.0f);

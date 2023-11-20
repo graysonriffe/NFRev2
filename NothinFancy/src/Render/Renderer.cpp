@@ -105,7 +105,7 @@ namespace nf::render {
 		std::vector<ID3D11Buffer*> constantBuffers;
 		constantBuffers.push_back(m_viewProjBuffer->getBuffer().Get());
 		constantBuffers.push_back(m_testModelConstantBuffer->getBuffer().Get());
-		m_context->VSSetConstantBuffers(0, constantBuffers.size(), constantBuffers.data());
+		m_context->VSSetConstantBuffers(0, static_cast<unsigned int>(constantBuffers.size()), constantBuffers.data());
 
 		m_testFramebuffer = std::make_unique<Framebuffer>(m_device);
 
