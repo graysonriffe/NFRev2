@@ -39,12 +39,14 @@ namespace nf::render {
 		ComPtr<IDXGISwapChain2> m_sc;
 		ComPtr<ID3D11RenderTargetView1> m_outRTV;
 
+		UP<Buffer> m_viewProjBuffer;
+
 		//Test stuff
 		UP<ShaderSet> m_testShaders;
-		UP<Buffer> m_testConstantBuffer;
 		UP<InputLayout> m_testLayout;
 		UP<SamplerState> m_testSampler;
 		UP<BlendState> m_testBlendState;
+		UP<Buffer> m_testModelConstantBuffer;
 		UP<Framebuffer> m_testFramebuffer;
 		UP<Camera> m_testCamera;
 		UP<Model> m_testFloor;

@@ -71,6 +71,9 @@ namespace nf::render {
 
 		setDisplay(dispConfig);
 
+		XMMATRIX dummy = XMMatrixIdentity();
+		m_viewProjBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Constant, &dummy, sizeof(dummy));
+
 		//Test stuff
 
 		std::string vertexShader, pixelShader;
@@ -82,21 +85,25 @@ namespace nf::render {
 
 		m_testLayout = std::make_unique<InputLayout>();
 		m_testLayout->pushFloat("POSITION", 3);
+		m_testLayout->pushFloat("NORMAL", 3);
 		m_testLayout->pushFloat("TEXCOORD", 2);
 		m_testLayout->create(m_device, vertexShader);
 		m_testLayout->bind(m_context);
 
 		m_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		XMMATRIX dummy = XMMatrixIdentity();
-		m_testConstantBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Constant, &dummy, sizeof(dummy));
-		m_testConstantBuffer->bind(m_context);
-
 		m_testSampler = std::make_unique<SamplerState>(m_device);
 		m_testSampler->bind(m_context);
 
 		m_testBlendState = std::make_unique<BlendState>(m_device);
 		m_testBlendState->bind(m_context);
+
+		m_testModelConstantBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Constant, &dummy, sizeof(dummy));
+
+		std::vector<ID3D11Buffer*> constantBuffers;
+		constantBuffers.push_back(m_viewProjBuffer->getBuffer().Get());
+		constantBuffers.push_back(m_testModelConstantBuffer->getBuffer().Get());
+		m_context->VSSetConstantBuffers(0, constantBuffers.size(), constantBuffers.data());
 
 		m_testFramebuffer = std::make_unique<Framebuffer>(m_device);
 
@@ -190,6 +197,8 @@ namespace nf::render {
 		XMVECTOR camera = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f), lookDir = XMVectorSet(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);
 		XMMATRIX projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, static_cast<float>(scWidth) / scHeight, 0.1f, 1000.0f);
+		XMMATRIX vp = view * projection;
+		m_viewProjBuffer->update(m_context, &vp, sizeof(vp));
 
 		m_testFloor->bind(m_context);
 		m_testFloorTexture->bind(m_context);
@@ -197,8 +206,7 @@ namespace nf::render {
 		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
 		model *= XMMatrixTranslation(0.0f, -3.0f, 0.0f);
-		XMMATRIX mvp = model * view * projection;
-		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
+		m_testModelConstantBuffer->update(m_context, &model, sizeof(model));
 		m_context->DrawIndexed(m_testFloor->getIndexCount(), 0, 0);
 
 		m_testCube->bind(m_context);
@@ -207,8 +215,7 @@ namespace nf::render {
 		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
 		model *= XMMatrixTranslation(0.0f, 0.0f, 0.0f);
-		mvp = model * view * projection;
-		m_testConstantBuffer->update(m_context, &mvp, sizeof(mvp));
+		m_testModelConstantBuffer->update(m_context, &model, sizeof(model));
 		m_context->DrawIndexed(m_testCube->getIndexCount(), 0, 0);
 
 		outputRTV(m_testFramebuffer->getRTV());

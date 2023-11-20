@@ -17,6 +17,7 @@ namespace nf::render {
 
 		void bind(ComPtr<ID3D11DeviceContext> context);
 		void update(ComPtr<ID3D11DeviceContext> context, const void* data, size_t size);
+		ComPtr<ID3D11Buffer> getBuffer() const;
 
 		~Buffer();
 	private:

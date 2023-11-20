@@ -48,7 +48,7 @@ namespace nf::render {
 				break;
 
 			case Constant:
-				context->VSSetConstantBuffers(0, 1, m_buffer.GetAddressOf());
+
 				break;
 		}
 	}
@@ -58,6 +58,10 @@ namespace nf::render {
 		context->Map(m_buffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &mapped);
 		std::memcpy(mapped.pData, data, size);
 		context->Unmap(m_buffer.Get(), 0);
+	}
+
+	ComPtr<ID3D11Buffer> Buffer::getBuffer() const {
+		return m_buffer;
 	}
 
 	Buffer::~Buffer() {
