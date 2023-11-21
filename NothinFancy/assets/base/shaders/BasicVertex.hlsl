@@ -23,7 +23,7 @@ struct VS_OUT {
 VS_OUT main(VS_IN input) {
     VS_OUT output;
     output.pos = mul(mul(vp, model), input.pos);
-    output.norm = input.norm;
+    output.norm = mul((float3x3)model, input.norm);
     output.tex = input.tex;
     output.pixCoord = (float3)mul(model, input.pos);
 
