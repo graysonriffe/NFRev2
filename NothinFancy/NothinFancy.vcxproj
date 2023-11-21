@@ -124,6 +124,7 @@
     <ClInclude Include="src\Render\Camera.h" />
     <ClInclude Include="src\Render\Framebuffer.h" />
     <ClInclude Include="src\Render\InputLayout.h" />
+    <ClInclude Include="src\Render\Light.h" />
     <ClInclude Include="src\Render\Model.h" />
     <ClInclude Include="src\Render\Renderer.h" />
     <ClInclude Include="src\Render\SamplerState.h" />
@@ -146,6 +147,7 @@
     <ClCompile Include="src\Render\Camera.cpp" />
     <ClCompile Include="src\Render\Framebuffer.cpp" />
     <ClCompile Include="src\Render\InputLayout.cpp" />
+    <ClCompile Include="src\Render\Light.cpp" />
     <ClCompile Include="src\Render\Model.cpp" />
     <ClCompile Include="src\Render\Renderer.cpp" />
     <ClCompile Include="src\Render\SamplerState.cpp" />

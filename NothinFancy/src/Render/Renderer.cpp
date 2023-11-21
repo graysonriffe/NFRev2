@@ -133,6 +133,12 @@ namespace nf::render {
 			NFError("Could not read cube.png!");
 
 		m_testCubeTexture = std::make_unique<Texture>(m_device, textureData);
+
+		m_testLight = std::make_unique<Light>(Light::Type::Point, Vec3());
+		m_testLight->setColor(Vec3(1.0f, 1.0f, 0.6f));
+		XMVECTOR lightBuffDummy[2] = { XMVectorZero(), XMVectorZero() };
+		m_testLightConstantBuffer = std::make_unique<Buffer>(m_device, Buffer::Type::Constant, &lightBuffDummy, sizeof(lightBuffDummy));
+		m_context->PSSetConstantBuffers(0, 1, m_testLightConstantBuffer->getBuffer().GetAddressOf());
 	}
 
 	void Renderer::setDisplay(DisplayConfig& conf) {
@@ -196,6 +202,23 @@ namespace nf::render {
 
 		m_testCamera->update();
 		Vec3 cameraPos = m_testCamera->getPosition(), cameraDir = m_testCamera->getRotation();
+
+		static float x = 0.0f;
+		x += 0.02f;
+		m_testLight->setPosition(Vec3(5 * std::sin(x), 2.0f, 5 * std::cos(x)));
+		std::vector<float> lightBuff;
+		Vec3 lightPos = m_testLight->getPosition();
+		Vec3 lightColor = m_testLight->getColor();
+		lightBuff.push_back(lightPos.x);
+		lightBuff.push_back(lightPos.y);
+		lightBuff.push_back(lightPos.z);
+		lightBuff.push_back(1.0f);
+		lightBuff.push_back(lightColor.x);
+		lightBuff.push_back(lightColor.y);
+		lightBuff.push_back(lightColor.z);
+		lightBuff.push_back(1.0f);
+
+		m_testLightConstantBuffer->update(m_context, lightBuff.data(), lightBuff.size() * sizeof(float));
 
 		XMVECTOR camera = XMVectorSet(cameraPos.x, cameraPos.y, cameraPos.z, 0.0f), lookDir = XMVectorSet(cameraDir.x, cameraDir.y, cameraDir.z, 0.0f), up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMMATRIX view = XMMatrixLookToLH(camera, lookDir, up);

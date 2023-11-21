@@ -13,6 +13,7 @@
 #include "Framebuffer.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Light.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -48,10 +49,13 @@ namespace nf::render {
 		UP<BlendState> m_testBlendState;
 		UP<Buffer> m_testModelConstantBuffer;
 		UP<Framebuffer> m_testFramebuffer;
+
 		UP<Camera> m_testCamera;
 		UP<Model> m_testFloor;
 		UP<Texture> m_testFloorTexture;
 		UP<Model> m_testCube;
 		UP<Texture> m_testCubeTexture;
+		UP<Light> m_testLight;
+		UP<Buffer> m_testLightConstantBuffer;
 	};
 }
