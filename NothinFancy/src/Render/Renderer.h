@@ -55,6 +55,7 @@ namespace nf::render {
 		UP<Texture> m_testFloorTexture;
 		UP<Model> m_testCube;
 		UP<Texture> m_testCubeTexture;
+		UP<Texture> m_testCubeSpecularTexture;
 		UP<Light> m_testLight;
 		UP<Buffer> m_testLightConstantBuffer;
 	};

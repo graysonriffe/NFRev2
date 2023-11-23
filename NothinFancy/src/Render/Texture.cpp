@@ -7,9 +7,11 @@
 #include "nf/Utility/Util.h"
 
 namespace nf::render {
-	Texture::Texture(ComPtr<ID3D11Device> device, const std::string& data) {
+	Texture::Texture(ComPtr<ID3D11Device> device, const std::string& data, Type type) {
+		using enum Type;
+
 		D3D11_TEXTURE2D_DESC desc = {};
-		DXGI_FORMAT texFormat = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		DXGI_FORMAT texFormat = type == SRGB ? DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT_R8G8B8A8_UNORM;
 		desc.Format = texFormat;
 		desc.MipLevels = 1;
 		desc.ArraySize = 1;
@@ -66,6 +68,11 @@ namespace nf::render {
 	ComPtr<ID3D11Texture2D> Texture::getTexture() const {
 		return m_texture;
 	}
+
+	ComPtr<ID3D11ShaderResourceView> Texture::getView() const {
+		return m_view;
+	}
+
 
 	Texture::~Texture() {
 

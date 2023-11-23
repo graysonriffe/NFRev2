@@ -134,6 +134,11 @@ namespace nf::render {
 
 		m_testCubeTexture = std::make_unique<Texture>(m_device, textureData);
 
+		if (!util::readFile("specular.png", textureData))
+			NFError("Could not read specular.png!");
+
+		m_testCubeSpecularTexture = std::make_unique<Texture>(m_device, textureData, Texture::Type::LINEAR);
+
 		m_testLight = std::make_unique<Light>(Light::Type::Point, Vec3());
 		m_testLight->setColor(Vec3(1.0f, 1.0f, 0.6f));
 		XMVECTOR lightBuffDummy[3] = { XMVectorZero(), XMVectorZero(), XMVectorZero() };
@@ -230,18 +235,23 @@ namespace nf::render {
 		XMMATRIX vp = view * projection;
 		m_viewProjBuffer->update(m_context, &vp, sizeof(vp));
 
-		m_testFloor->bind(m_context);
+		/*m_testFloor->bind(m_context);
 		m_testFloorTexture->bind(m_context);
 		XMMATRIX model = XMMatrixIdentity();
 		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
 		model *= XMMatrixTranslation(0.0f, -3.0f, 0.0f);
 		m_testModelConstantBuffer->update(m_context, &model, sizeof(model));
-		m_context->DrawIndexed(m_testFloor->getIndexCount(), 0, 0);
+		m_context->DrawIndexed(m_testFloor->getIndexCount(), 0, 0);*/
 
 		m_testCube->bind(m_context);
-		m_testCubeTexture->bind(m_context);
-		model = XMMatrixIdentity();
+		//m_testCubeTexture->bind(m_context);
+		std::vector<ID3D11ShaderResourceView*> cubeTextures;
+		cubeTextures.push_back(m_testCubeTexture->getView().Get());
+		cubeTextures.push_back(m_testCubeSpecularTexture->getView().Get());
+		m_context->PSSetShaderResources(0, 2, cubeTextures.data());
+
+		XMMATRIX model = XMMatrixIdentity();
 		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
 		model *= XMMatrixTranslation(0.0f, 0.0f, 0.0f);
