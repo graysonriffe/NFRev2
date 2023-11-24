@@ -87,8 +87,9 @@ namespace nf::render {
 
 		m_testLayout = std::make_unique<InputLayout>();
 		m_testLayout->pushFloat("POSITION", 3);
-		m_testLayout->pushFloat("NORMAL", 3);
 		m_testLayout->pushFloat("TEXCOORD", 2);
+		m_testLayout->pushFloat("NORMAL", 3);
+		m_testLayout->pushFloat("TANGENT", 3);
 		m_testLayout->create(m_device, vertexShader);
 		m_testLayout->bind(m_context);
 
@@ -124,6 +125,11 @@ namespace nf::render {
 
 		m_testFloorTexture = std::make_unique<Texture>(m_device, textureData);
 
+		if (!util::readFile("floor_normal.png", textureData))
+			NFError("Could not read floor_normal.png!");
+
+		m_testFloorNormalTexture = std::make_unique<Texture>(m_device, textureData, Texture::Type::LINEAR);
+
 		if (!util::readFile("cube.obj", objData))
 			NFError("Could not read cube.obj!");
 
@@ -134,8 +140,8 @@ namespace nf::render {
 
 		m_testCubeTexture = std::make_unique<Texture>(m_device, textureData);
 
-		if (!util::readFile("specular.png", textureData))
-			NFError("Could not read specular.png!");
+		if (!util::readFile("cube_specular.png", textureData))
+			NFError("Could not read cube_specular.png!");
 
 		m_testCubeSpecularTexture = std::make_unique<Texture>(m_device, textureData, Texture::Type::LINEAR);
 
@@ -235,28 +241,33 @@ namespace nf::render {
 		XMMATRIX vp = view * projection;
 		m_viewProjBuffer->update(m_context, &vp, sizeof(vp));
 
-		/*m_testFloor->bind(m_context);
-		m_testFloorTexture->bind(m_context);
+		m_testFloor->bind(m_context);
+		//m_testFloorTexture->bind(m_context);
+		std::vector<ID3D11ShaderResourceView*> floorTextures;
+		floorTextures.push_back(m_testFloorTexture->getView().Get());
+		floorTextures.push_back(m_testCubeSpecularTexture->getView().Get());
+		floorTextures.push_back(m_testFloorNormalTexture->getView().Get());
+		m_context->PSSetShaderResources(0, 3, floorTextures.data());
 		XMMATRIX model = XMMatrixIdentity();
 		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
 		model *= XMMatrixTranslation(0.0f, -3.0f, 0.0f);
 		m_testModelConstantBuffer->update(m_context, &model, sizeof(model));
-		m_context->DrawIndexed(m_testFloor->getIndexCount(), 0, 0);*/
+		m_context->DrawIndexed(m_testFloor->getIndexCount(), 0, 0);
 
-		m_testCube->bind(m_context);
-		//m_testCubeTexture->bind(m_context);
-		std::vector<ID3D11ShaderResourceView*> cubeTextures;
-		cubeTextures.push_back(m_testCubeTexture->getView().Get());
-		cubeTextures.push_back(m_testCubeSpecularTexture->getView().Get());
-		m_context->PSSetShaderResources(0, 2, cubeTextures.data());
+		//m_testCube->bind(m_context);
+		////m_testCubeTexture->bind(m_context);
+		//std::vector<ID3D11ShaderResourceView*> cubeTextures;
+		//cubeTextures.push_back(m_testCubeTexture->getView().Get());
+		//cubeTextures.push_back(m_testCubeSpecularTexture->getView().Get());
+		//m_context->PSSetShaderResources(0, 2, cubeTextures.data());
 
-		XMMATRIX model = XMMatrixIdentity();
+		model = XMMatrixIdentity();
 		model *= XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		model *= XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), 0.0f));
 		model *= XMMatrixTranslation(0.0f, 0.0f, 0.0f);
 		m_testModelConstantBuffer->update(m_context, &model, sizeof(model));
-		m_context->DrawIndexed(m_testCube->getIndexCount(), 0, 0);
+		//m_context->DrawIndexed(m_testCube->getIndexCount(), 0, 0);
 
 		outputRTV(m_testFramebuffer->getRTV());
 

@@ -1,6 +1,75 @@
 #pragma once
 
 namespace nf::render {
+	struct Vec2 {
+		float x, y;
+
+		Vec2()
+			: x(0.0f), y(0.0f)
+		{}
+
+		Vec2(float val)
+			: x(val), y(val)
+		{}
+
+		Vec2(float x, float y)
+			: x(x), y(y)
+		{}
+
+		Vec2 operator+(const Vec2& rhs) {
+			return Vec2(x + rhs.x, y + rhs.y);
+		}
+
+		Vec2 operator-(const Vec2& rhs) {
+			return Vec2(x - rhs.x, y - rhs.y);
+		}
+
+		Vec2 operator*(const float coeff) {
+			return Vec2(x * coeff, y * coeff);
+		}
+
+		Vec2 operator/(const Vec2& rhs) const {
+			return Vec2(x / rhs.x, y / rhs.y);
+		}
+
+		Vec2& operator+=(const Vec2& rhs) {
+			this->x += rhs.x, this->y += rhs.y;
+			return *this;
+		}
+
+		Vec2& operator-=(const Vec2& rhs) {
+			this->x -= rhs.x, this->y -= rhs.y;
+			return *this;
+		}
+
+		Vec2& operator*=(const Vec2& rhs) {
+			this->x *= rhs.x, this->y *= rhs.y;
+			return *this;
+		}
+
+		Vec2& operator/=(const Vec2& rhs) {
+			this->x /= rhs.x, this->y /= rhs.y;
+			return *this;
+		}
+
+		Vec2& cross(const Vec2& rhs) {
+			float tempX = x, tempY = y;
+			x = tempX * rhs.y - tempY * rhs.x;
+			y = tempX * rhs.y - tempY * rhs.x;
+			return *this;
+		}
+
+		float length() {
+			return std::sqrtf(x * x + y * y);
+		}
+
+		Vec2& normalize() {
+			float lInv = 1.0f / length();
+			x *= lInv, y *= lInv;
+			return *this;
+		}
+	};
+
 	struct Vec3 {
 		float x, y, z;
 

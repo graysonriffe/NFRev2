@@ -53,6 +53,7 @@ namespace nf::render {
 		UP<Camera> m_testCamera;
 		UP<Model> m_testFloor;
 		UP<Texture> m_testFloorTexture;
+		UP<Texture> m_testFloorNormalTexture;
 		UP<Model> m_testCube;
 		UP<Texture> m_testCubeTexture;
 		UP<Texture> m_testCubeSpecularTexture;
