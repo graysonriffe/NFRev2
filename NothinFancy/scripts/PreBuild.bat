@@ -36,10 +36,11 @@ set version=%commit%
 :testOutput
 set file=src\version.h
 
-set /p oldVersion= < %file%
+if exist %file% set /p oldVersion= < %file%
 if "%oldVersion%" == "#define NFVERSION "%version%"" goto sameVersion
 
 echo #define NFVERSION "%version%"> %file%
+echo [NF Pre Build] Version set
 goto continue
 
 :sameVersion
