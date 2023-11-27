@@ -155,10 +155,10 @@
     <ClCompile Include="src\Render\SamplerState.cpp" />
     <ClCompile Include="src\Render\ShaderSet.cpp" />
     <ClCompile Include="src\Render\Texture.cpp" />
-    <ClCompile Include="src\Util\file.cpp" />
-    <ClCompile Include="src\Util\log.cpp" />
-    <ClCompile Include="src\Util\timing.cpp" />
-    <ClCompile Include="src\Util\Util.cpp" />
+    <ClCompile Include="src\Utility\file.cpp" />
+    <ClCompile Include="src\Utility\log.cpp" />
+    <ClCompile Include="src\Utility\timing.cpp" />
+    <ClCompile Include="src\Utility\Util.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
