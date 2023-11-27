@@ -2,6 +2,7 @@
 //Master header for Nothin' Fancy
 
 #include "nf/Application.h"
+#include "nf/Asset/AssetBuild.h"
 #include "nf/Utility/Util.h"
 
 #ifdef NFENTRY
