@@ -11,8 +11,9 @@ if %errorlevel% neq 0 goto noGit
 goto yesGit
 
 :noGit
-echo [NF Pre Build] Error: git not found on PATH!
-exit 1
+echo [NF Pre Build] git not found on PATH! Using unknown version string.
+set version=unknown
+goto writeVersion
 
 ::We have git on the command line, so set the version string
 :yesGit
@@ -27,16 +28,17 @@ del temp2
 if "%branch%" == "stable" goto noBranch
 
 set version=%commit%+%branch%
-goto testOutput
+goto writeVersion
 
 :noBranch
 set version=%commit%
 
-::Don't touch the version file if it's already up to date
-:testOutput
+:writeVersion
 set file=src\version.h
 
 if exist %file% set /p oldVersion= < %file%
+
+::Don't touch the version file if it's already up to date
 if "%oldVersion%" == "#define NFVERSION "%version%"" goto sameVersion
 
 echo #define NFVERSION "%version%"> %file%
