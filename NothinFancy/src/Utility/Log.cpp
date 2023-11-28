@@ -12,14 +12,16 @@ namespace nf::util {
 		switch (type) {
 			case EngLog:
 				return "Engine Log";
-			case UserLog:
+			case Log:
 				return "Log";
 			case EngError:
 				return "Engine Error";
-			case UserError:
+			case Error:
 				return "Error";
 			case Timing:
 				return "Timing";
+			case AssetBuild:
+				return "Asset Builder";
 			default:
 				return "Unknown";
 		}
@@ -35,17 +37,20 @@ namespace nf::util {
 			case EngLog:
 				color = 6;
 				break;
-			case UserLog:
+			case Log:
 				color = 14;
 				break;
 			case EngError:
 				color = 4;
 				break;
-			case UserError:
+			case Error:
 				color = 4;
 				break;
 			case Timing:
 				color = 10;
+				break;
+			case AssetBuild:
+				color = 3;
 				break;
 		}
 

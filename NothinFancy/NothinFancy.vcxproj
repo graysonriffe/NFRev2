@@ -71,7 +71,8 @@
       <Command>scripts/PreBuild.bat</Command>
     </PreBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;Cabinet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>scripts/PostBuild.bat "$(SolutionDir)ExampleApp\working\" "$(OutDir)"</Command>
@@ -101,7 +102,8 @@
       <Command>scripts/PreBuild.bat</Command>
     </PreBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;Cabinet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/ignore:4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>scripts/PostBuild.bat "$(SolutionDir)ExampleApp\working\" "$(OutDir)"</Command>

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "nf/Utility/Util.h"
 
-#include <Psapi.h>
-
 #undef max
 
 namespace nf::util {

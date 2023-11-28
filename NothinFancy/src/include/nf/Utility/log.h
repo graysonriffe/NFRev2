@@ -4,28 +4,31 @@
 
 #ifdef NFENGINE
 
+#ifdef NFASSETBUILDLOG
+#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::AssetBuild)
+#else
 #define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::EngLog)
+#endif
+
 #define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::EngError, std::strrchr(__FILE__, '\\') + 1, __LINE__)
 
 #else
-
-#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::UserLog)
-#define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::UserError, std::strrchr(__FILE__, '\\') + 1, __LINE__)
-
+#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::Log)
+#define NFError(x) ::nf::util::errImplD(x, ::nf::util::LogType::Error, std::strrchr(__FILE__, '\\') + 1, __LINE__)
 #endif
 
-#else
+#else //Release
 
+#ifdef NFASSETBUILDLOG
+#define NFLog(x) ::nf::util::logImpl(x, ::nf::util::LogType::AssetBuild)
+#else
 #define NFLog(x)
+#endif
 
 #ifdef NFENGINE
-
 #define NFError(x) ::nf::util::errImplRel(x, ::nf::util::LogType::EngError, std::strrchr(__FILE__, '\\') + 1, __LINE__)
-
 #else
-
-#define NFError(x) ::nf::util::errImplRel(x, ::nf::util::LogType::UserError, std::strrchr(__FILE__, '\\') + 1, __LINE__)
-
+#define NFError(x) ::nf::util::errImplRel(x, ::nf::util::LogType::Error, std::strrchr(__FILE__, '\\') + 1, __LINE__)
 #endif
 
 #endif
@@ -33,10 +36,11 @@
 namespace nf::util {
 	enum class LogType {
 		EngLog,
-		UserLog,
+		Log,
 		EngError,
-		UserError,
-		Timing
+		Error,
+		Timing,
+		AssetBuild
 	};
 
 	void logImpl(const char* str, LogType type);

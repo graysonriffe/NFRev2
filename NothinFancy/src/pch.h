@@ -9,6 +9,7 @@
 #include <queue>
 #include <map>
 #include <unordered_map>
+#include <set>
 #include <chrono>
 #include <memory>
 #include <algorithm>
@@ -22,6 +23,8 @@
 
 //Windows
 #include <Windows.h>
+#include <Psapi.h>
+#include <compressapi.h>
 
 //Direct3D 11.3
 #include <d3d11_3.h>
