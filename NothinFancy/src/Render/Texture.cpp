@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "Texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
-
 #include "nf/Utility/Util.h"
 
 namespace nf::render {
@@ -19,19 +16,14 @@ namespace nf::render {
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
 		D3D11_SUBRESOURCE_DATA sub = {};
-		int width = 0, height = 0, channels = 0, requiredChannels = 4;
-		unsigned char* stbData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data.data()), static_cast<int>(data.size()), &width, &height, &channels, requiredChannels);
-		if (!stbData)
-			NFError("Could not load texture data!");
 
-		desc.Width = width;
+		/*desc.Width = width;
 		desc.Height = height;
 		sub.pSysMem = stbData;
-		sub.SysMemPitch = width * requiredChannels;
+		sub.SysMemPitch = width * requiredChannels;*/
 
 		device->CreateTexture2D(&desc, &sub, m_texture.GetAddressOf());
 
-		stbi_image_free(stbData);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
 		viewDesc.Format = texFormat;

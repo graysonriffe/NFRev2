@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nf::render {
+namespace nf {
 	struct Vec2 {
 		float x, y;
 

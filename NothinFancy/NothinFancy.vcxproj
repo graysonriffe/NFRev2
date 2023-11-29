@@ -133,7 +133,7 @@
     <ClInclude Include="src\Render\SamplerState.h" />
     <ClInclude Include="src\Render\ShaderSet.h" />
     <ClInclude Include="src\Render\Texture.h" />
-    <ClInclude Include="src\Render\Vector.h" />
+    <ClInclude Include="src\Vector.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
