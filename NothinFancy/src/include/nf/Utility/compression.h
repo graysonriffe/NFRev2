@@ -2,6 +2,6 @@
 #include <string>
 
 namespace nf::util {
-	void compress(std::string& in, std::string& out);
-	void decompress(std::string& in, std::string& out);
+	bool compress(std::string& in, std::string& out);
+	bool decompress(std::string& in, std::string& out);
 }

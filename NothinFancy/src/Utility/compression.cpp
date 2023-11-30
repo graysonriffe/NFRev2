@@ -6,18 +6,22 @@ namespace zlib {
 }
 
 namespace nf::util {
-	void compress(std::string& in, std::string& out) {
+	bool compress(std::string& in, std::string& out) {
 		out.resize(zlib::compressBound(static_cast<unsigned long>(in.length())));
 
 		zlib::Bytef *dest = reinterpret_cast<zlib::Bytef*>(out.data()), *source = reinterpret_cast<zlib::Bytef*>(in.data());
 		unsigned long destSize = static_cast<unsigned long>(out.size()), sourceSize = static_cast<unsigned long>(in.size());
 
-		zlib::compress(dest, &destSize, source, sourceSize);
+		int result = zlib::compress(dest, &destSize, source, sourceSize);
+		if (result != Z_OK)
+			return false;
 
 		out.resize(destSize);
+
+		return true;
 	}
 
-	void decompress(std::string& in, std::string& out) {
+	bool decompress(std::string& in, std::string& out) {
 		using namespace zlib;
 
 		zlib::Bytef* source = reinterpret_cast<zlib::Bytef*>(in.data());
@@ -42,10 +46,15 @@ namespace nf::util {
 
 			result = zlib::inflate(&stream, Z_NO_FLUSH);
 
-		} while (result != Z_STREAM_END);
+		} while (result == Z_BUF_ERROR);
+
+		if (result != Z_OK)
+			return false;
 
 		zlib::inflateEnd(&stream);
 
 		out.resize(stream.total_out);
+
+		return true;
 	}
 }

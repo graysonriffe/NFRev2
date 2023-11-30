@@ -1,9 +1,6 @@
 #include "pch.h"
 #include "nf/Asset/AssetBuild.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
-
 #define NFASSETBUILDLOG
 #include "nf/Utility/Util.h"
 #include "Vector.h"
@@ -16,7 +13,6 @@ namespace nf::asset {
 
 	static bool buildPack(const std::filesystem::directory_entry root, std::string packName);
 	static bool loadFiles(ExtensionSet& extensions, Files& files, const std::filesystem::directory_entry root);
-	static bool cookTextures(Files& textures);
 	static bool cookModels(Files& models, Files& textures);
 	static void cookModelMaterials(std::string& material, std::vector<std::string>& order, Files& textures);
 	static std::string getEndOfLine(std::stringstream& ss);
@@ -52,11 +48,6 @@ namespace nf::asset {
 		Files textures;
 		ExtensionSet textureExtensions({ "png", "jpg" });
 		if (!loadFiles(textureExtensions, textures, root)) {
-			Error(packName);
-			return false;
-		}
-
-		if (!cookTextures(textures)) {
 			Error(packName);
 			return false;
 		}
@@ -133,27 +124,6 @@ namespace nf::asset {
 				NFLog(std::format("Could not read asset \"{}\"!", currFilename));
 				return false;
 			}
-		}
-
-		return true;
-	}
-
-	bool cookTextures(Files& textures) {
-		for (auto& currTexture : textures) {
-			std::string& data = currTexture.second;
-
-			int width = 0, height = 0, channels = 0, requiredChannels = 4;
-			unsigned char* stbData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data.data()), static_cast<int>(data.size()), &width, &height, &channels, requiredChannels);
-			if (!stbData) {
-				NFLog(std::format("Could not read the texture data from {}!", currTexture.first));
-				return false;
-			}
-
-			data.clear();
-			data += std::format("{} {}\n", width, height);
-			data += std::string(reinterpret_cast<const char*>(stbData), width * height * requiredChannels);
-
-			stbi_image_free(stbData);
 		}
 
 		return true;
@@ -418,10 +388,15 @@ namespace nf::asset {
 
 		NFLog("Compressing...");
 		std::string out;
-		nf::util::compress(contents, out);
-
-		if (!util::writeFile(filename, out))
+		if (!nf::util::compress(contents, out)) {
+			NFLog("Could not compress pack!");
 			return false;
+		}
+
+		if (!util::writeFile(filename, out)) {
+			NFLog("Could not write pack!");
+			return false;
+		}
 
 		return true;
 	}
