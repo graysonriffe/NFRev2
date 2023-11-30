@@ -71,8 +71,9 @@
       <Command>scripts/PreBuild.bat</Command>
     </PreBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;Cabinet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;Cabinet.lib;libzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(ProjectDir)dep\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>scripts/PostBuild.bat "$(SolutionDir)ExampleApp\working\" "$(OutDir)"</Command>
@@ -102,8 +103,9 @@
       <Command>scripts/PreBuild.bat</Command>
     </PreBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;Cabinet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;Cabinet.lib;libzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/ignore:4006 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(ProjectDir)dep\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
       <Command>scripts/PostBuild.bat "$(SolutionDir)ExampleApp\working\" "$(OutDir)"</Command>
@@ -111,6 +113,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\include\nf\Asset\AssetBuild.h" />
+    <ClInclude Include="src\include\nf\Utility\compression.h" />
     <ClInclude Include="src\Input\Event.h" />
     <ClInclude Include="src\include\nf.h" />
     <ClInclude Include="src\include\nf\Application.h" />
@@ -157,6 +160,7 @@
     <ClCompile Include="src\Render\SamplerState.cpp" />
     <ClCompile Include="src\Render\ShaderSet.cpp" />
     <ClCompile Include="src\Render\Texture.cpp" />
+    <ClCompile Include="src\Utility\compression.cpp" />
     <ClCompile Include="src\Utility\file.cpp" />
     <ClCompile Include="src\Utility\log.cpp" />
     <ClCompile Include="src\Utility\timing.cpp" />

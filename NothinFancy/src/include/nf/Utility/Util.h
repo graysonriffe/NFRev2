@@ -4,6 +4,7 @@
 #include "nf/Utility/log.h"
 #include "nf/Utility/timing.h"
 #include "nf/Utility/file.h"
+#include "nf/Utility/compression.h"
 
 #define NFSleep(x) std::this_thread::sleep_for(std::chrono::milliseconds(x))
 

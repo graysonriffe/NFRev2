@@ -2,5 +2,5 @@
 #include <filesystem>
 
 namespace nf::asset {
-	bool buildAssets(std::filesystem::path assetDir);
+	void buildAssets(std::filesystem::path assetDir);
 }

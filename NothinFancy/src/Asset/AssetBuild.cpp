@@ -23,31 +23,29 @@ namespace nf::asset {
 	static bool cookModel(std::string& model, std::vector<std::string>& materialOrder);
 	static bool writePack(const std::string& filename, std::string& contents);
 
-	bool buildAssets(std::filesystem::path assetDir) {
+	void buildAssets(std::filesystem::path assetDir) {
 		NFLog("Startup");
 
 		std::string packExtension = ".nfpack";
 
-		unsigned int dirCount = 0;
+		unsigned int packCount = 0;
 
 		for (const auto& currRoot : std::filesystem::directory_iterator(assetDir)) {
 			if (!currRoot.is_directory()) continue;
 
-			dirCount++;
 			std::string currPackName = currRoot.path().filename().string() + packExtension;
 			NFLog(std::format("Building pack \"{}\"", currPackName));
 
-			if (!buildPack(currRoot, currPackName))
-				return false;
+			if (buildPack(currRoot, currPackName))
+				packCount++;
 		}
 
-		if (dirCount)
-			NFLog(std::format("Built {} asset pack(s)", dirCount));
+		if (packCount)
+			NFLog(std::format("Built {} asset pack(s)", packCount));
 		else
-			NFLog("No directories found!");
+			NFLog("No packs built!");
 
 		NFLog(std::format("Done"));
-		return true;
 	}
 
 	bool buildPack(const std::filesystem::directory_entry root, std::string packName) {
@@ -82,6 +80,12 @@ namespace nf::asset {
 		//Merge everything and write
 		assets.merge(textures);
 		assets.merge(models);
+
+		if (assets.empty()) {
+			NFLog("No assets found!");
+			Error(packName);
+			return false;
+		}
 
 		std::string currPackOut;
 
@@ -170,6 +174,11 @@ namespace nf::asset {
 
 			std::vector<std::string> materialOrder;
 			cookModelMaterials(material, materialOrder, textures);
+
+			if (materialOrder.empty()) {
+				NFLog(std::format("Model \"{}\" has no materials!", model.first));
+				return false;
+			}
 
 			if (!cookModel(model.second, materialOrder))
 				return false;
@@ -407,8 +416,9 @@ namespace nf::asset {
 		NFLog("Obfuscating...");
 		std::for_each(contents.begin(), contents.end(), [](char& c) { c += 100; });
 
-		//NFLog("Compressing...");
-		std::string out = contents;
+		NFLog("Compressing...");
+		std::string out;
+		nf::util::compress(contents, out);
 
 		if (!util::writeFile(filename, out))
 			return false;
